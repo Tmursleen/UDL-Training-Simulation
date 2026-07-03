@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Day in Katie's Shoes — UDL Training Simulation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Poppins:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1D1330;
+    --ink-soft:#6B5E85;
+    --panel:#FFFFFF;
+    --panel-2:#F7F3FC;
+    --pink:#EC1279;
+    --pink-dark:#C40E63;
+    --purple:#6C2BD9;
+    --orange:#FF7A45;
+    --yellow:#FFC93C;
+    --teal:#17C3B2;
+    --red-low:#FF4D6D;
+    --line:#ECE3F8;
+    --radius:26px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Poppins',sans-serif;
+    color:var(--ink);
+    min-height:100vh;
+    padding:28px 16px 60px;
+    background:#EFE6FA;
+    position:relative;
+    overflow-x:hidden;
+  }
+  body::before, body::after{
+    content:"";
+    position:fixed;
+    border-radius:50%;
+    filter:blur(10px);
+    z-index:0;
+  }
+  body::before{
+    width:900px;height:900px;
+    top:-420px; right:-320px;
+    background:radial-gradient(circle at 30% 30%, var(--purple), var(--pink) 60%, var(--orange) 100%);
+    opacity:.9;
+  }
+  body::after{
+    width:700px;height:700px;
+    bottom:-380px; left:-280px;
+    background:radial-gradient(circle at 60% 40%, var(--orange), var(--pink) 55%, var(--purple) 100%);
+    opacity:.55;
+  }
+  .wrap{max-width:1080px;margin:0 auto;position:relative;z-index:1;}
+
+  .app-card{
+    background:var(--panel);
+    border-radius:36px;
+    padding:30px;
+    box-shadow:0 30px 70px rgba(108,43,217,.28);
+  }
+
+  header{margin-bottom:18px;}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11.5px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--pink-dark);
+    font-weight:600;
+    margin-bottom:6px;
+  }
+  h1{
+    font-family:'Baloo 2',sans-serif;
+    font-size:clamp(30px,4.6vw,42px);
+    font-weight:800;
+    margin:0 0 8px;
+    line-height:1.05;
+    color:var(--ink);
+  }
+  .sub{color:var(--ink-soft);font-size:15px;max-width:560px;line-height:1.55;}
+
+  .layout{
+    display:grid;
+    grid-template-columns:1fr 300px;
+    gap:26px;
+    margin-top:22px;
+  }
+  @media(max-width:760px){.layout{grid-template-columns:1fr;}}
+
+  /* TABS */
+  .tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
+  .tab{
+    flex:1; min-width:130px;
+    background:var(--panel-2);
+    border:2px solid var(--line);
+    border-radius:16px;
+    padding:10px 14px;
+    cursor:pointer;
+    transition:all .2s ease;
+    text-align:left;
+  }
+  .tab:disabled{cursor:not-allowed;opacity:.45;}
+  .tab .tnum{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--ink-soft);letter-spacing:.06em;}
+  .tab .tname{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:14.5px;margin-top:1px;}
+  .tab.active{border-color:var(--pink);background:#FDEAF3;}
+  .tab.done .tnum::after{content:" ✓";color:var(--teal);}
+
+  /* HUD */
+  .hud{
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:14px 18px;
+    display:flex;
+    align-items:center;
+    gap:16px;
+    margin-bottom:18px;
+    flex-wrap:wrap;
+  }
+  .meter-label{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:14px;min-width:150px;}
+  .gauge{
+    flex:1; min-width:160px; height:16px;
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:99px;
+    overflow:hidden;
+  }
+  .gauge-fill{
+    height:100%; width:50%;
+    background:linear-gradient(90deg,var(--purple),var(--pink));
+    border-radius:99px;
+    transition:width .5s cubic-bezier(.4,0,.2,1), background .3s ease;
+  }
+  .gauge-fill.low{background:linear-gradient(90deg,#B4173F,var(--red-low));}
+  .gauge-fill.high{background:linear-gradient(90deg,#0E8E82,var(--teal));}
+  .gauge-num{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;min-width:34px;text-align:right;}
+  .badges{display:flex;gap:6px;flex-wrap:wrap;}
+  .badge{
+    font-family:'JetBrains Mono',monospace;font-size:10.5px;
+    background:var(--purple); color:#fff; padding:4px 9px;
+    border-radius:99px; font-weight:600;
+  }
+
+  /* STAGE */
+  .stage h2{font-family:'Baloo 2',sans-serif;font-size:22px;margin:0 0 6px;}
+  .scenario{color:var(--ink-soft);font-size:14px;line-height:1.6;margin-bottom:16px;max-width:600px;}
+  .board{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  @media(max-width:640px){.board{grid-template-columns:1fr;}}
+  .col-title{
+    font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.09em;
+    text-transform:uppercase;color:var(--ink-soft);font-weight:600;margin-bottom:8px;
+  }
+  .pool, .dropzone{
+    background:var(--panel-2);
+    border:2px dashed var(--line);
+    border-radius:18px;
+    padding:12px;
+    min-height:190px;
+    display:flex; flex-direction:column; gap:8px;
+  }
+  .dropzone.dragover{border-color:var(--pink);background:#FDEAF3;}
+  .card{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:10px 12px;
+    font-size:13.5px;
+    font-weight:500;
+    cursor:grab;
+    user-select:none; touch-action:none;
+    display:flex; align-items:center; gap:8px;
+    box-shadow:0 1px 2px rgba(29,19,48,.06);
+    transition:box-shadow .15s ease;
+  }
+  .card:active{cursor:grabbing;}
+  .card.dragging{opacity:.35;}
+  .card.placed-good{border-color:var(--teal);background:#EAFBF8;}
+  .card.placed-bad{border-color:var(--red-low);background:#FFEFF1;}
+  .card .emo{font-size:16px;}
+  .drag-ghost{
+    position:fixed; pointer-events:none; z-index:999;
+    background:#fff; border:1px solid var(--pink); border-radius:14px;
+    padding:10px 12px; font-size:13.5px; font-weight:500;
+    box-shadow:0 8px 20px rgba(29,19,48,.2);
+    display:flex; align-items:center; gap:8px;
+  }
+  .hint{font-size:12px;color:var(--ink-soft);margin-top:4px;}
+  .toast{font-size:12px;font-weight:600;padding:5px 9px;border-radius:8px;margin-top:2px;display:inline-block;}
+  .toast.good{background:#EAFBF8;color:#0E8E82;}
+  .toast.bad{background:#FFEFF1;color:var(--red-low);}
+
+  .actions{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+  button.primary{
+    font-family:'Baloo 2',sans-serif; font-weight:700; font-size:14px; letter-spacing:.02em;
+    background:var(--pink); color:#fff; border:none; border-radius:99px;
+    padding:12px 24px; cursor:pointer; text-transform:uppercase;
+    box-shadow:0 8px 18px rgba(236,18,121,.35);
+    transition:background .15s ease, transform .1s ease;
+  }
+  button.primary:hover{background:var(--pink-dark);}
+  button.primary:active{transform:translateY(1px);}
+  button.primary:disabled{background:#D8CCE8;box-shadow:none;cursor:not-allowed;}
+  button.ghost{
+    font-family:'Baloo 2',sans-serif; font-weight:700; font-size:12.5px;
+    background:transparent; color:var(--ink-soft); border:1px solid var(--line);
+    border-radius:99px; padding:11px 18px; cursor:pointer;
+  }
+
+  /* FEEDBACK */
+  .feedback{margin-top:18px;border-top:1px solid var(--line);padding-top:16px;display:none;}
+  .feedback.show{display:block;animation:fadein .4s ease;}
+  @keyframes fadein{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+  .fb-block{border-radius:16px;padding:14px 16px;margin-bottom:10px;}
+  .fb-outcome{background:#EAFBF8;border:1px solid var(--teal);}
+  .fb-theory{background:var(--panel-2);border:1px solid var(--line);}
+  .fb-title{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;margin-bottom:6px;color:var(--ink-soft);}
+  .fb-body{font-size:14px;line-height:1.6;}
+  .fb-ref{font-size:12px;color:var(--ink-soft);margin-top:8px;font-style:italic;}
+
+  .end-screen{text-align:center;padding:36px 16px;}
+  .end-screen h2{font-family:'Baloo 2',sans-serif;font-size:28px;margin-bottom:10px;}
+  .end-screen p{color:var(--ink-soft);max-width:480px;margin:0 auto 18px;line-height:1.6;}
+
+  /* KATIE PANEL */
+  .katie-panel{
+    background:linear-gradient(160deg, var(--purple), var(--pink) 60%, var(--orange));
+    border-radius:24px;
+    padding:20px 16px;
+    display:flex; flex-direction:column; align-items:center;
+    position:sticky; top:20px;
+    color:#fff;
+    min-height:360px;
+  }
+  .katie-day{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px; letter-spacing:.1em; text-transform:uppercase;
+    background:rgba(255,255,255,.18);
+    padding:4px 12px; border-radius:99px; margin-bottom:12px;
+  }
+  .katie-svg-wrap{width:100%;max-width:210px;margin-bottom:12px;}
+  .katie-svg-wrap svg{width:100%;height:auto;display:block;}
+  .speech{
+    background:#fff; color:var(--ink);
+    border-radius:16px; padding:12px 14px;
+    font-size:13px; font-weight:500; line-height:1.45;
+    position:relative; text-align:center;
+    box-shadow:0 6px 16px rgba(0,0,0,.15);
+  }
+  .speech::before{
+    content:""; position:absolute; top:-8px; left:50%; transform:translateX(-50%);
+    border-left:8px solid transparent; border-right:8px solid transparent; border-bottom:8px solid #fff;
+  }
+  .katie-name{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:15px;margin-top:14px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="app-card">
+    <header>
+      <div class="eyebrow">UDL Training Simulation</div>
+      <h1>A Day in Katie's Shoes</h1>
+      <p class="sub">You're the instructional designer. Drag choices in to help Katie — an employee with ADHD — get through her first week of workplace training. Submit whenever you feel you've done enough. Not every option helps, so choose with care.</p>
+    </header>
+
+    <div class="layout">
+      <div>
+        <div class="tabs" id="tabs"></div>
+        <div class="hud">
+          <div class="meter-label" id="meterLabel">Engagement Meter</div>
+          <div class="gauge"><div class="gauge-fill" id="gaugeFill" style="width:50%"></div></div>
+          <div class="gauge-num" id="gaugeNum">50</div>
+          <div class="badges" id="badges"></div>
+        </div>
+        <div class="stage" id="stage"></div>
+      </div>
+
+      <div class="katie-panel">
+        <div class="katie-day" id="katieDay">Day 1</div>
+        <div class="katie-svg-wrap" id="katieSvg"></div>
+        <div class="speech" id="katieSpeech">Ready to start the day...</div>
+        <div class="katie-name">Katie</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---------- DATA ---------- */
+const GOOD_DELTA = 6;
+const BAD_DELTA = -7;
+
+const DAYS = [
+  {
+    id:1, name:"Cybersecurity", meterLabel:"Engagement Meter",
+    title:"Day 1 — Mandatory Cybersecurity Training",
+    scenario:"Katie's course is a 45-minute lecture: one long video, no breaks, no interaction. She's already losing focus. Drag in strategies that will actually help — a few options here will do more harm than good.",
+    poolTitle:"Available Strategies", zoneTitle:"Katie's Support Plan",
+    items:[
+      {label:"Break the lesson into 5-minute modules", emo:"•", good:true, fb:"Shorter chunks reduce the demand on working memory and give Katie natural points to reset her focus."},
+      {label:"Add progress bars", emo:"•", good:true, fb:"Visible progress gives Katie a sense of momentum and control over the task."},
+      {label:"Include interactive challenges", emo:"•", good:true, fb:"Active tasks keep attention engaged far better than passive watching."},
+      {label:"Allow Katie to choose the learning order", emo:"•", good:true, fb:"Choice increases autonomy and buy-in — a core UDL principle."},
+      {label:"Add real workplace scenarios", emo:"•", good:true, fb:"Relevance to her actual job makes the content easier to care about and remember."},
+      {label:"Require one uninterrupted sitting", emo:"•", good:false, fb:"Long unbroken sessions are exactly where sustained attention breaks down for Katie."},
+      {label:"Remove pause buttons", emo:"•", good:false, fb:"Taking away control over pacing removes one of Katie's few coping tools."},
+      {label:"Long blocks of text", emo:"•", good:false, fb:"Dense uninterrupted text is a heavy working-memory load with no visual relief."}
+    ],
+    outcome:"Katie earns points, badges, and immediate feedback for completing learning tasks. Positive reinforcement increases motivation and encourages her to keep engaging with the content.",
+    theory:"Behaviourism emphasizes that learning is strengthened through reinforcement. Gamification elements such as rewards, progress bars, and instant feedback encourage persistence and sustained participation. Hamari, Koivisto, and Sarsa found that points, badges, and progress indicators often increase learner motivation and engagement.",
+    ref:"Hamari, J., Koivisto, J., & Sarsa, H. (2014). Does gamification work? A literature review of empirical studies on gamification. Proceedings of the 47th Hawaii International Conference on System Sciences, 3025–3034.",
+    badge:"Engagement +",
+    shirt:"#17C3B2", prop:"laptop",
+    speech:{good:"The bite-sized videos are actually keeping me hooked!", bad:"I've completely lost track of what this video is even about..."}
+  },
+  {
+    id:2, name:"The Process", meterLabel:"Understanding Meter",
+    title:"Day 2 — Understanding a Complicated Process",
+    scenario:"Katie has to learn a complicated software process from a 20-page PDF: technical language, no visuals. She's overwhelmed. Build Katie's Learning Toolkit — a couple of these resources will just add to the overload.",
+    poolTitle:"Available Resources", zoneTitle:"Katie's Learning Toolkit",
+    items:[
+      {label:"Video demonstration", emo:"📹", good:true, fb:"Seeing the process performed makes each step concrete."},
+      {label:"Infographic", emo:"🖼️", good:true, fb:"A visual summary reduces the load of holding steps in memory."},
+      {label:"Audio explanation", emo:"🎧", good:true, fb:"A second channel of input reinforces the material without adding visual clutter."},
+      {label:"Step-by-step checklist", emo:"📋", good:true, fb:"Breaking the process into checkable steps supports working memory directly."},
+      {label:"Interactive software simulation", emo:"🖥️", good:true, fb:"Practicing the real interface builds procedural understanding, not just recognition."},
+      {label:"Long technical manual", emo:"📖", good:false, fb:"Dense unstructured text with no visuals is the exact overload Katie started with."},
+      {label:"Video with no captions or transcript", emo:"🔇", good:false, fb:"Without captions or a transcript, this resource creates a new barrier instead of removing one."}
+    ],
+    outcome:"Katie processes information more effectively when it's organized into smaller chunks and presented through visuals, audio, demonstrations, and written supports. Offering multiple representations reduces working memory demands and supports knowledge construction.",
+    theory:"Cognitivism focuses on how learners receive, organize, and store information in memory. Well-designed instruction reduces unnecessary cognitive load and improves comprehension. Mayer's Cognitive Theory of Multimedia Learning demonstrates that combining words and visuals promotes deeper understanding than text alone.",
+    ref:"Mayer, R. E. (2021). Multimedia Learning (3rd ed.). Cambridge University Press.",
+    badge:"Understanding +",
+    shirt:"#6C2BD9", prop:"books",
+    speech:{good:"These visuals are finally making this click!", bad:"This manual is just a wall of text... I'm lost."}
+  },
+  {
+    id:3, name:"Showcase", meterLabel:"Confidence Meter",
+    title:"Day 3 — Showcase Katie's Knowledge",
+    scenario:"Katie understands the material — now she has to prove it. Choose ways for her to demonstrate her learning. A couple of these methods work against everything you've built so far.",
+    poolTitle:"Assessment Options", zoneTitle:"Katie's Assessment Plan",
+    items:[
+      {label:"Complete a simulation", emo:"🎮", good:true, fb:"Performing the task in context proves applied understanding."},
+      {label:"Explain the process verbally", emo:"💬", good:true, fb:"Talking it through lets Katie demonstrate understanding without a writing barrier."},
+      {label:"Solve a workplace scenario", emo:"🧩", good:true, fb:"Authentic problems show she can transfer knowledge, not just recall it."},
+      {label:"Build a workflow", emo:"📊", good:true, fb:"Constructing the process herself is strong evidence of real understanding."},
+      {label:"Demonstrate to a coworker", emo:"👥", good:true, fb:"Teaching someone else is one of the clearest signs of mastery."},
+      {label:"Give a written multiple-choice test only", emo:"📝", good:false, fb:"A single written format doesn't let Katie show what she actually knows how to do."},
+      {label:"Require her to recite a memorized script", emo:"🗒️", good:false, fb:"Memorization tests recall, not understanding — it isn't authentic to the real task."}
+    ],
+    outcome:"Katie demonstrates learning by solving authentic workplace problems rather than completing only traditional written tests. She actively applies knowledge through simulations, scenarios, and collaborative activities.",
+    theory:"Constructivism suggests that learners build knowledge through authentic experiences, reflection, and problem-solving. Flexible assessments let learners demonstrate meaningful understanding in contexts similar to their workplace. Jonassen argues that authentic tasks and real-world problem solving promote deeper learning than rote memorization.",
+    ref:"Jonassen, D. H. (1999). Designing constructivist learning environments. In C. M. Reigeluth (Ed.), Instructional-design theories and models: A new paradigm of instructional theory (Vol. II, pp. 215–239).",
+    badge:"Confidence ★",
+    shirt:"#EC1279", prop:"star",
+    speech:{good:"I actually feel ready to show what I know!", bad:"A written test? I don't think this proves I understand it."}
+  },
+  {
+    id:4, name:"Redesign", meterLabel:"Inclusion Meter",
+    title:"Day 4 — Redesign Katie's Training Course",
+    scenario:"One last course still needs a redesign. Drag in the features that align with UDL — and leave out anything that recreates the barriers Katie ran into this week.",
+    poolTitle:"Design Features", zoneTitle:"Redesigned Course",
+    items:[
+      {label:"Chunk content", emo:"•", good:true, fb:"Smaller units keep cognitive load manageable throughout."},
+      {label:"Add captions", emo:"•", good:true, fb:"Captions support multiple means of representation for all learners."},
+      {label:"Provide simulations", emo:"•", good:true, fb:"Hands-on practice builds real procedural skill."},
+      {label:"Include reflection", emo:"•", good:true, fb:"Reflection consolidates learning and builds self-awareness."},
+      {label:"Offer learner choice", emo:"•", good:true, fb:"Choice increases motivation and ownership of the learning path."},
+      {label:"Build in checkpoints", emo:"•", good:true, fb:"Checkpoints let learners track progress and re-engage after a break."},
+      {label:"Allow flexible assessments", emo:"•", good:true, fb:"Multiple ways to demonstrate learning removes unnecessary barriers."},
+      {label:"One long final exam", emo:"•", good:false, fb:"This recreates the exact single-format, high-stakes barrier Katie struggled with."},
+      {label:"No feedback until the very end", emo:"•", good:false, fb:"Without checkpoints along the way, Katie has no chance to self-correct or stay motivated."}
+    ],
+    outcome:"You've integrated UDL principles to create an inclusive workplace learning experience that supports diverse learners. Katie has successfully completed her training.",
+    theory:"Bandura emphasized that people learn through observation, modeling, feedback, and developing self-efficacy. Seeing Katie succeed after effective design decisions encourages learners to adopt similar practices in their own instructional design.",
+    ref:"Bandura, A. (1977). Social Learning Theory. Prentice Hall.",
+    badge:"Course Complete 🎓",
+    shirt:"#FFC93C", prop:"cap",
+    speech:{good:"This course actually works with how my brain works!", bad:"Without breaks or choice, I can already feel myself checking out."}
+  }
+];
+
+/* ---------- KATIE SVG ---------- */
+function propMarkup(prop){
+  if(prop==="laptop"){
+    return `<rect x="118" y="60" width="46" height="34" rx="4" fill="#fff" stroke="#1D1330" stroke-width="2"/>
+      <polygon points="136,71 136,83 148,77" fill="#EC1279"/>
+      <rect x="112" y="94" width="58" height="6" rx="3" fill="#1D1330"/>`;
+  }
+  if(prop==="books"){
+    return `<rect x="112" y="82" width="56" height="12" rx="3" fill="#FFC93C"/>
+      <rect x="116" y="70" width="48" height="12" rx="3" fill="#17C3B2"/>
+      <rect x="120" y="58" width="40" height="12" rx="3" fill="#EC1279"/>
+      <circle cx="150" cy="44" r="9" fill="#fff" stroke="#1D1330" stroke-width="2"/>
+      <line x1="150" y1="30" x2="150" y2="24" stroke="#1D1330" stroke-width="2"/>`;
+  }
+  if(prop==="star"){
+    return `<polygon points="150,40 156,55 172,55 159,65 164,80 150,71 136,80 141,65 128,55 144,55"
+      fill="#FFC93C" stroke="#1D1330" stroke-width="2" stroke-linejoin="round"/>`;
+  }
+  if(prop==="cap"){
+    return `<polygon points="110,60 150,46 190,60 150,74" fill="#1D1330"/>
+      <rect x="140" y="60" width="20" height="16" fill="#1D1330"/>
+      <circle cx="150" cy="46" r="3" fill="#FFC93C"/>
+      <line x1="150" y1="46" x2="168" y2="66" stroke="#FFC93C" stroke-width="2"/>
+      <circle cx="168" cy="68" r="3" fill="#FFC93C"/>`;
+  }
+  return "";
+}
+
+function faceMarkup(mood){
+  if(mood==="good"){
+    return `<circle cx="63" cy="128" r="4" fill="#1D1330"/>
+      <circle cx="87" cy="128" r="4" fill="#1D1330"/>
+      <path d="M60 116 Q63 111 68 114" stroke="#1D1330" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <path d="M82 114 Q87 111 90 116" stroke="#1D1330" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <path d="M60 142 Q75 156 90 142" stroke="#1D1330" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <circle cx="54" cy="136" r="5" fill="#FF8FAE" opacity=".7"/>
+      <circle cx="96" cy="136" r="5" fill="#FF8FAE" opacity=".7"/>`;
+  }
+  return `<circle cx="63" cy="129" r="3.4" fill="#1D1330"/>
+    <circle cx="87" cy="129" r="3.4" fill="#1D1330"/>
+    <path d="M58 113 Q63 119 70 116" stroke="#1D1330" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M80 116 Q87 119 92 113" stroke="#1D1330" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M62 148 Q68 143 75 147 Q82 143 88 148" stroke="#1D1330" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M100 108 q6 8 0 16" stroke="#4FB6E8" stroke-width="3" fill="none" stroke-linecap="round" opacity=".8"/>`;
+}
+
+function katieSVG(day, mood){
+  return `<svg viewBox="0 0 200 210" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="75" cy="196" rx="55" ry="10" fill="rgba(0,0,0,.12)"/>
+    <path d="M40 205 Q40 150 75 150 Q110 150 110 205 Z" fill="${day.shirt}"/>
+    <circle cx="75" cy="120" r="42" fill="#F2C29B"/>
+    <path d="M33 118 Q30 75 75 70 Q120 75 117 118 Q117 90 75 88 Q33 90 33 118 Z" fill="#4A3728"/>
+    ${propMarkup(day.prop)}
+    ${faceMarkup(mood)}
+  </svg>`;
+}
+
+/* ---------- STATE ---------- */
+let state = {
+  currentDay: 0,
+  meter: 50,
+  unlocked: [true,false,false,false],
+  completed: [false,false,false,false],
+  badges: [],
+  dayPlacements: {},   // dayIndex -> {itemIndex: 'good'|'bad'}
+  dayContribution: {}  // dayIndex -> total meter delta contributed
+};
+
+const tabsEl = document.getElementById('tabs');
+const stageEl = document.getElementById('stage');
+const gaugeFill = document.getElementById('gaugeFill');
+const gaugeNum = document.getElementById('gaugeNum');
+const meterLabel = document.getElementById('meterLabel');
+const badgesEl = document.getElementById('badges');
+const katieDayEl = document.getElementById('katieDay');
+const katieSvgEl = document.getElementById('katieSvg');
+const katieSpeechEl = document.getElementById('katieSpeech');
+
+function renderTabs(){
+  tabsEl.innerHTML = '';
+  DAYS.forEach((d,i)=>{
+    const btn = document.createElement('button');
+    btn.className = 'tab' + (i===state.currentDay?' active':'') + (state.completed[i]?' done':'');
+    btn.disabled = !state.unlocked[i];
+    btn.innerHTML = `<div class="tnum">Day ${d.id}</div><div class="tname">${d.name}</div>`;
+    btn.onclick = ()=>{ if(state.unlocked[i]){ state.currentDay = i; renderAll(); } };
+    tabsEl.appendChild(btn);
+  });
+}
+
+function renderHUD(){
+  const d = DAYS[state.currentDay];
+  meterLabel.textContent = d.meterLabel;
+  const pct = Math.max(0, Math.min(100, state.meter));
+  gaugeFill.style.width = pct + '%';
+  gaugeFill.classList.remove('low','high');
+  if(pct < 35) gaugeFill.classList.add('low');
+  else if(pct > 70) gaugeFill.classList.add('high');
+  gaugeNum.textContent = Math.round(pct);
+  badgesEl.innerHTML = state.badges.map(b=>`<span class="badge">${b}</span>`).join('');
+}
+
+function renderKatie(){
+  const d = DAYS[state.currentDay];
+  const mood = state.meter >= 50 ? 'good' : 'bad';
+  katieDayEl.textContent = 'Day ' + d.id;
+  katieSvgEl.innerHTML = katieSVG(d, mood);
+  katieSpeechEl.textContent = d.speech[mood];
+}
+
+let dragged = null;
+let ghost = null;
+
+function renderStage(){
+  const d = DAYS[state.currentDay];
+  const placements = state.dayPlacements[state.currentDay] || {};
+  const placedCount = Object.keys(placements).length;
+
+  stageEl.innerHTML = `
+    <h2>${d.title}</h2>
+    <p class="scenario">${d.scenario}</p>
+    <div class="board">
+      <div>
+        <div class="col-title">${d.poolTitle}</div>
+        <div class="pool" id="pool"></div>
+      </div>
+      <div>
+        <div class="col-title">${d.zoneTitle}</div>
+        <div class="dropzone" id="dropzone"></div>
+      </div>
+    </div>
+    <p class="hint">Drag cards into ${d.zoneTitle}, then submit whenever you feel you've done enough for Katie.</p>
+    <div class="actions">
+      <button class="primary" id="completeBtn" ${placedCount>0?'':'disabled'}>Submit &amp; See Results</button>
+      <button class="ghost" id="resetBtn">Reset Day</button>
+    </div>
+    <div class="feedback" id="feedback"></div>
+  `;
+
+  const pool = document.getElementById('pool');
+  const dropzone = document.getElementById('dropzone');
+
+  d.items.forEach((item,idx)=>{
+    if(placements[idx]) return;
+    pool.appendChild(makeCard(item, idx, d));
+  });
+  d.items.forEach((item,idx)=>{
+    if(!placements[idx]) return;
+    const c = makeCard(item, idx, d, true);
+    c.classList.add(placements[idx]==='good' ? 'placed-good' : 'placed-bad');
+    const toast = document.createElement('div');
+    toast.className = 'toast ' + (placements[idx]==='good'?'good':'bad');
+    toast.textContent = placements[idx]==='good' ? '+ helps Katie' : '– hurts Katie';
+    c.appendChild(toast);
+    dropzone.appendChild(c);
+  });
+
+  if(pool.children.length===0){
+    pool.innerHTML = '<div class="hint">All cards placed.</div>';
+  }
+  if(dropzone.children.length===0){
+    dropzone.innerHTML = '<div class="hint">Nothing placed yet.</div>';
+  }
+
+  document.getElementById('completeBtn').onclick = ()=> completeDay(d);
+  document.getElementById('resetBtn').onclick = ()=> {
+    state.meter -= (state.dayContribution[state.currentDay] || 0);
+    state.dayContribution[state.currentDay] = 0;
+    state.dayPlacements[state.currentDay] = {};
+    renderAll();
+  };
+}
+
+function makeCard(item, idx, d, placed){
+  const c = document.createElement('div');
+  c.className = 'card';
+  c.innerHTML = `<span class="emo">${item.emo}</span><span>${item.label}</span>`;
+  if(!placed){
+    c.addEventListener('pointerdown', (e)=>startDrag(e, item, idx, c, d));
+  }
+  return c;
+}
+
+function startDrag(e, item, idx, cardEl, d){
+  e.preventDefault();
+  dragged = {item, idx, d};
+  cardEl.classList.add('dragging');
+
+  ghost = document.createElement('div');
+  ghost.className = 'drag-ghost';
+  ghost.innerHTML = `<span class="emo">${item.emo}</span><span>${item.label}</span>`;
+  document.body.appendChild(ghost);
+  moveGhost(e);
+
+  function onMove(ev){ moveGhost(ev); highlightDropzone(ev); }
+  function onUp(ev){
+    document.removeEventListener('pointermove', onMove);
+    document.removeEventListener('pointerup', onUp);
+    const dz = document.getElementById('dropzone');
+    const rect = dz.getBoundingClientRect();
+    const inside = ev.clientX>=rect.left && ev.clientX<=rect.right && ev.clientY>=rect.top && ev.clientY<=rect.bottom;
+    dz.classList.remove('dragover');
+    ghost.remove();
+    cardEl.classList.remove('dragging');
+    if(inside){ placeItem(d, idx, item); }
+    dragged = null;
+  }
+  document.addEventListener('pointermove', onMove);
+  document.addEventListener('pointerup', onUp);
+}
+
+function moveGhost(e){
+  if(!ghost) return;
+  ghost.style.left = (e.clientX+12) + 'px';
+  ghost.style.top = (e.clientY+12) + 'px';
+}
+function highlightDropzone(e){
+  const dz = document.getElementById('dropzone');
+  const rect = dz.getBoundingClientRect();
+  const inside = e.clientX>=rect.left && e.clientX<=rect.right && e.clientY>=rect.top && e.clientY<=rect.bottom;
+  dz.classList.toggle('dragover', inside);
+}
+
+function placeItem(d, idx, item){
+  if(!state.dayPlacements[state.currentDay]) state.dayPlacements[state.currentDay] = {};
+  state.dayPlacements[state.currentDay][idx] = item.good ? 'good' : 'bad';
+  const delta = item.good ? GOOD_DELTA : BAD_DELTA;
+  state.meter = Math.max(0, Math.min(100, state.meter + delta));
+  state.dayContribution[state.currentDay] = (state.dayContribution[state.currentDay] || 0) + delta;
+  renderAll();
+}
+
+function completeDay(d){
+  const placements = state.dayPlacements[state.currentDay] || {};
+  const goodCount = Object.values(placements).filter(v=>v==='good').length;
+  const badCount = Object.values(placements).filter(v=>v==='bad').length;
+
+  state.completed[state.currentDay] = true;
+  if(state.currentDay+1 < DAYS.length) state.unlocked[state.currentDay+1] = true;
+  if(!state.badges.includes(d.badge)) state.badges.push(d.badge);
+
+  renderHUD();
+  renderKatie();
+
+  const fb = document.getElementById('feedback');
+  fb.classList.add('show');
+  const isLast = state.currentDay === DAYS.length - 1;
+  fb.innerHTML = `
+    <div class="fb-block fb-outcome">
+      <div class="fb-title">Learning Outcome</div>
+      <div class="fb-body">${d.outcome}</div>
+      <div class="fb-body" style="margin-top:8px;font-weight:600;">You chose ${goodCount} helpful strateg${goodCount===1?'y':'ies'}${badCount>0 ? ' and '+badCount+' that worked against Katie' : ''}.</div>
+    </div>
+    <div class="fb-block fb-theory">
+      <div class="fb-title">Connection to Theory</div>
+      <div class="fb-body">${d.theory}</div>
+      <div class="fb-ref">${d.ref}</div>
+    </div>
+    <div class="actions">
+      ${isLast ? '<button class="primary" id="finishBtn">Finish Training</button>' : '<button class="primary" id="nextBtn">Continue to Day '+(d.id+1)+'</button>'}
+    </div>
+  `;
+  document.getElementById('completeBtn').remove();
+  document.getElementById('resetBtn').style.display = 'none';
+
+  if(isLast){
+    document.getElementById('finishBtn').onclick = renderEndScreen;
+  } else {
+    document.getElementById('nextBtn').onclick = ()=>{
+      state.currentDay += 1;
+      renderAll();
+    };
+  }
+  renderTabs();
+}
+
+function renderEndScreen(){
+  stageEl.innerHTML = `
+    <div class="end-screen">
+      <h2>🎓 Katie completed her training</h2>
+      <p>Across four days, you applied Behaviourism, Cognitivism, Constructivism, and Social Learning Theory through Universal Design for Learning — turning a week that could have shut Katie out into one that let her succeed.</p>
+      <div class="badges" style="justify-content:center;">${state.badges.map(b=>`<span class="badge">${b}</span>`).join('')}</div>
+      <div class="actions" style="justify-content:center;margin-top:22px;">
+        <button class="primary" id="replayBtn">Play Again</button>
+      </div>
+    </div>
+  `;
+  document.getElementById('replayBtn').onclick = ()=>{
+    state = {currentDay:0, meter:50, unlocked:[true,false,false,false], completed:[false,false,false,false], badges:[], dayPlacements:{}, dayContribution:{}};
+    renderAll();
+  };
+}
+
+function renderAll(){
+  renderTabs();
+  renderHUD();
+  renderKatie();
+  renderStage();
+}
+renderAll();
+</script>
+</body>
+</html>
