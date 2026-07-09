@@ -5,21 +5,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>A Day in Katie's Shoes — UDL Training Simulation</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Poppins:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,500;1,600&family=Poppins:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --ink:#1D1330;
-    --ink-soft:#6B5E85;
+    --ink:#2B2118;
+    --ink-soft:#6E6459;
     --panel:#FFFFFF;
-    --panel-2:#F7F3FC;
-    --pink:#EC1279;
-    --pink-dark:#C40E63;
-    --purple:#6C2BD9;
-    --orange:#FF7A45;
-    --yellow:#FFC93C;
-    --teal:#17C3B2;
-    --red-low:#FF4D6D;
-    --line:#ECE3F8;
+    --panel-2:#F3EDDE;
+    --gold:#A6895B;
+    --gold-dark:#8A6F45;
+    --brown:#3B2E22;
+    --brown-soft:#6B5540;
+    --rust:#B5652E;
+    --mustard:#C9A227;
+    --sage:#6E8F6B;
+    --sage-dark:#4F6F52;
+    --clay:#B85C4A;
+    --clay-dark:#8F4636;
+    --line:#E3D9C2;
     --radius:26px;
   }
   *{box-sizing:border-box;}
@@ -29,28 +32,9 @@
     color:var(--ink);
     min-height:100vh;
     padding:28px 16px 60px;
-    background:#EFE6FA;
+    background:#F4EEE0;
     position:relative;
     overflow-x:hidden;
-  }
-  body::before, body::after{
-    content:"";
-    position:fixed;
-    border-radius:50%;
-    filter:blur(10px);
-    z-index:0;
-  }
-  body::before{
-    width:900px;height:900px;
-    top:-420px; right:-320px;
-    background:radial-gradient(circle at 30% 30%, var(--purple), var(--pink) 60%, var(--orange) 100%);
-    opacity:.9;
-  }
-  body::after{
-    width:700px;height:700px;
-    bottom:-380px; left:-280px;
-    background:radial-gradient(circle at 60% 40%, var(--orange), var(--pink) 55%, var(--purple) 100%);
-    opacity:.55;
   }
   .wrap{max-width:1080px;margin:0 auto;position:relative;z-index:1;}
 
@@ -58,7 +42,7 @@
     background:var(--panel);
     border-radius:36px;
     padding:30px;
-    box-shadow:0 30px 70px rgba(108,43,217,.28);
+    box-shadow:0 30px 70px rgba(43,33,24,.12);
   }
 
   header{margin-bottom:18px;}
@@ -67,12 +51,12 @@
     font-size:11.5px;
     letter-spacing:.14em;
     text-transform:uppercase;
-    color:var(--pink-dark);
+    color:var(--gold-dark);
     font-weight:600;
     margin-bottom:6px;
   }
   h1{
-    font-family:'Baloo 2',sans-serif;
+    font-family:'Playfair Display',serif;
     font-size:clamp(30px,4.6vw,42px);
     font-weight:800;
     margin:0 0 8px;
@@ -103,9 +87,9 @@
   }
   .tab:disabled{cursor:not-allowed;opacity:.45;}
   .tab .tnum{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--ink-soft);letter-spacing:.06em;}
-  .tab .tname{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:14.5px;margin-top:1px;}
-  .tab.active{border-color:var(--pink);background:#FDEAF3;}
-  .tab.done .tnum::after{content:" ✓";color:var(--teal);}
+  .tab .tname{font-family:'Playfair Display',serif;font-weight:700;font-size:14.5px;margin-top:1px;}
+  .tab.active{border-color:var(--gold);background:#F3E9D2;}
+  .tab.done .tnum::after{content:" ✓";color:var(--sage);}
 
   /* HUD */
   .hud{
@@ -119,7 +103,7 @@
     margin-bottom:18px;
     flex-wrap:wrap;
   }
-  .meter-label{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:14px;min-width:150px;}
+  .meter-label{font-family:'Playfair Display',serif;font-weight:700;font-size:14px;min-width:150px;}
   .gauge{
     flex:1; min-width:160px; height:16px;
     background:#fff;
@@ -129,22 +113,22 @@
   }
   .gauge-fill{
     height:100%; width:50%;
-    background:linear-gradient(90deg,var(--purple),var(--pink));
+    background:linear-gradient(90deg,var(--brown),var(--gold));
     border-radius:99px;
     transition:width .5s cubic-bezier(.4,0,.2,1), background .3s ease;
   }
-  .gauge-fill.low{background:linear-gradient(90deg,#B4173F,var(--red-low));}
-  .gauge-fill.high{background:linear-gradient(90deg,#0E8E82,var(--teal));}
+  .gauge-fill.low{background:linear-gradient(90deg,#7A3A2C,var(--clay));}
+  .gauge-fill.high{background:linear-gradient(90deg,#3E5940,var(--sage));}
   .gauge-num{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;min-width:34px;text-align:right;}
   .badges{display:flex;gap:6px;flex-wrap:wrap;}
   .badge{
     font-family:'JetBrains Mono',monospace;font-size:10.5px;
-    background:var(--purple); color:#fff; padding:4px 9px;
+    background:var(--brown); color:#fff; padding:4px 9px;
     border-radius:99px; font-weight:600;
   }
 
   /* STAGE */
-  .stage h2{font-family:'Baloo 2',sans-serif;font-size:22px;margin:0 0 6px;}
+  .stage h2{font-family:'Playfair Display',serif;font-size:22px;margin:0 0 6px;}
   .scenario{color:var(--ink-soft);font-size:14px;line-height:1.6;margin-bottom:16px;max-width:600px;}
   .board{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
   @media(max-width:640px){.board{grid-template-columns:1fr;}}
@@ -160,7 +144,7 @@
     min-height:190px;
     display:flex; flex-direction:column; gap:8px;
   }
-  .dropzone.dragover{border-color:var(--pink);background:#FDEAF3;}
+  .dropzone.dragover{border-color:var(--gold);background:#F3E9D2;}
   .card{
     background:#fff;
     border:1px solid var(--line);
@@ -171,39 +155,39 @@
     cursor:grab;
     user-select:none; touch-action:none;
     display:flex; align-items:center; gap:8px;
-    box-shadow:0 1px 2px rgba(29,19,48,.06);
+    box-shadow:0 1px 2px rgba(43,33,24,.06);
     transition:box-shadow .15s ease;
   }
   .card:active{cursor:grabbing;}
   .card.dragging{opacity:.35;}
-  .card.placed-good{border-color:var(--teal);background:#EAFBF8;}
-  .card.placed-bad{border-color:var(--red-low);background:#FFEFF1;}
+  .card.placed-good{border-color:var(--sage);background:#EAF1E6;}
+  .card.placed-bad{border-color:var(--clay);background:#F8E9E4;}
   .card .emo{font-size:16px;}
   .drag-ghost{
     position:fixed; pointer-events:none; z-index:999;
-    background:#fff; border:1px solid var(--pink); border-radius:14px;
+    background:#fff; border:1px solid var(--gold); border-radius:14px;
     padding:10px 12px; font-size:13.5px; font-weight:500;
-    box-shadow:0 8px 20px rgba(29,19,48,.2);
+    box-shadow:0 8px 20px rgba(43,33,24,.2);
     display:flex; align-items:center; gap:8px;
   }
   .hint{font-size:12px;color:var(--ink-soft);margin-top:4px;}
   .toast{font-size:12px;font-weight:600;padding:5px 9px;border-radius:8px;margin-top:2px;display:inline-block;}
-  .toast.good{background:#EAFBF8;color:#0E8E82;}
-  .toast.bad{background:#FFEFF1;color:var(--red-low);}
+  .toast.good{background:#EAF1E6;color:#3E5940;}
+  .toast.bad{background:#F8E9E4;color:var(--clay);}
 
   .actions{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
   button.primary{
-    font-family:'Baloo 2',sans-serif; font-weight:700; font-size:14px; letter-spacing:.02em;
-    background:var(--pink); color:#fff; border:none; border-radius:99px;
+    font-family:'Poppins',sans-serif; font-weight:600; font-size:13.5px; letter-spacing:.02em;
+    background:var(--brown); color:#FBF6EA; border:none; border-radius:99px;
     padding:12px 24px; cursor:pointer; text-transform:uppercase;
-    box-shadow:0 8px 18px rgba(236,18,121,.35);
+    box-shadow:0 8px 18px rgba(59,46,34,.32);
     transition:background .15s ease, transform .1s ease;
   }
-  button.primary:hover{background:var(--pink-dark);}
+  button.primary:hover{background:var(--ink);}
   button.primary:active{transform:translateY(1px);}
-  button.primary:disabled{background:#D8CCE8;box-shadow:none;cursor:not-allowed;}
+  button.primary:disabled{background:#DCD3BF;box-shadow:none;cursor:not-allowed;}
   button.ghost{
-    font-family:'Baloo 2',sans-serif; font-weight:700; font-size:12.5px;
+    font-family:'Poppins',sans-serif; font-weight:600; font-size:12.5px;
     background:transparent; color:var(--ink-soft); border:1px solid var(--line);
     border-radius:99px; padding:11px 18px; cursor:pointer;
   }
@@ -213,19 +197,19 @@
   .feedback.show{display:block;animation:fadein .4s ease;}
   @keyframes fadein{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
   .fb-block{border-radius:16px;padding:14px 16px;margin-bottom:10px;}
-  .fb-outcome{background:#EAFBF8;border:1px solid var(--teal);}
+  .fb-outcome{background:#EAF1E6;border:1px solid var(--sage);}
   .fb-theory{background:var(--panel-2);border:1px solid var(--line);}
   .fb-title{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;margin-bottom:6px;color:var(--ink-soft);}
   .fb-body{font-size:14px;line-height:1.6;}
   .fb-ref{font-size:12px;color:var(--ink-soft);margin-top:8px;font-style:italic;}
 
   .end-screen{text-align:center;padding:36px 16px;}
-  .end-screen h2{font-family:'Baloo 2',sans-serif;font-size:28px;margin-bottom:10px;}
+  .end-screen h2{font-family:'Playfair Display',serif;font-size:28px;margin-bottom:10px;}
   .end-screen p{color:var(--ink-soft);max-width:480px;margin:0 auto 18px;line-height:1.6;}
 
   /* KATIE PANEL */
   .katie-panel{
-    background:linear-gradient(160deg, var(--purple), var(--pink) 60%, var(--orange));
+    background:linear-gradient(160deg, var(--brown), var(--gold) 60%, var(--rust));
     border-radius:24px;
     padding:20px 16px;
     display:flex; flex-direction:column; align-items:center;
@@ -252,7 +236,7 @@
     content:""; position:absolute; top:-8px; left:50%; transform:translateX(-50%);
     border-left:8px solid transparent; border-right:8px solid transparent; border-bottom:8px solid #fff;
   }
-  .katie-name{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:15px;margin-top:14px;}
+  .katie-name{font-family:'Playfair Display',serif;font-weight:700;font-size:15px;margin-top:14px;}
 </style>
 </head>
 <body>
@@ -311,7 +295,7 @@ const DAYS = [
     theory:"Behaviourism emphasizes that learning is strengthened through reinforcement. Gamification elements such as rewards, progress bars, and instant feedback encourage persistence and sustained participation. Hamari, Koivisto, and Sarsa found that points, badges, and progress indicators often increase learner motivation and engagement.",
     ref:"Hamari, J., Koivisto, J., & Sarsa, H. (2014). Does gamification work? A literature review of empirical studies on gamification. Proceedings of the 47th Hawaii International Conference on System Sciences, 3025–3034.",
     badge:"Engagement +",
-    shirt:"#17C3B2", prop:"laptop",
+    shirt:"#6E8F6B", prop:"laptop",
     speech:{good:"The bite-sized videos are actually keeping me hooked!", bad:"I've completely lost track of what this video is even about..."}
   },
   {
@@ -332,7 +316,7 @@ const DAYS = [
     theory:"Cognitivism focuses on how learners receive, organize, and store information in memory. Well-designed instruction reduces unnecessary cognitive load and improves comprehension. Mayer's Cognitive Theory of Multimedia Learning demonstrates that combining words and visuals promotes deeper understanding than text alone.",
     ref:"Mayer, R. E. (2021). Multimedia Learning (3rd ed.). Cambridge University Press.",
     badge:"Understanding +",
-    shirt:"#6C2BD9", prop:"books",
+    shirt:"#3B2E22", prop:"books",
     speech:{good:"These visuals are finally making this click!", bad:"This manual is just a wall of text... I'm lost."}
   },
   {
@@ -353,7 +337,7 @@ const DAYS = [
     theory:"Constructivism suggests that learners build knowledge through authentic experiences, reflection, and problem-solving. Flexible assessments let learners demonstrate meaningful understanding in contexts similar to their workplace. Jonassen argues that authentic tasks and real-world problem solving promote deeper learning than rote memorization.",
     ref:"Jonassen, D. H. (1999). Designing constructivist learning environments. In C. M. Reigeluth (Ed.), Instructional-design theories and models: A new paradigm of instructional theory (Vol. II, pp. 215–239).",
     badge:"Confidence ★",
-    shirt:"#EC1279", prop:"star",
+    shirt:"#A6895B", prop:"star",
     speech:{good:"I actually feel ready to show what I know!", bad:"A written test? I don't think this proves I understand it."}
   },
   {
@@ -376,7 +360,7 @@ const DAYS = [
     theory:"Bandura emphasized that people learn through observation, modeling, feedback, and developing self-efficacy. Seeing Katie succeed after effective design decisions encourages learners to adopt similar practices in their own instructional design.",
     ref:"Bandura, A. (1977). Social Learning Theory. Prentice Hall.",
     badge:"Course Complete 🎓",
-    shirt:"#FFC93C", prop:"cap",
+    shirt:"#C9A227", prop:"cap",
     speech:{good:"This course actually works with how my brain works!", bad:"Without breaks or choice, I can already feel myself checking out."}
   }
 ];
@@ -384,47 +368,47 @@ const DAYS = [
 /* ---------- KATIE SVG ---------- */
 function propMarkup(prop){
   if(prop==="laptop"){
-    return `<rect x="118" y="60" width="46" height="34" rx="4" fill="#fff" stroke="#1D1330" stroke-width="2"/>
-      <polygon points="136,71 136,83 148,77" fill="#EC1279"/>
-      <rect x="112" y="94" width="58" height="6" rx="3" fill="#1D1330"/>`;
+    return `<rect x="118" y="60" width="46" height="34" rx="4" fill="#fff" stroke="#2B2118" stroke-width="2"/>
+      <polygon points="136,71 136,83 148,77" fill="#A6895B"/>
+      <rect x="112" y="94" width="58" height="6" rx="3" fill="#2B2118"/>`;
   }
   if(prop==="books"){
-    return `<rect x="112" y="82" width="56" height="12" rx="3" fill="#FFC93C"/>
-      <rect x="116" y="70" width="48" height="12" rx="3" fill="#17C3B2"/>
-      <rect x="120" y="58" width="40" height="12" rx="3" fill="#EC1279"/>
-      <circle cx="150" cy="44" r="9" fill="#fff" stroke="#1D1330" stroke-width="2"/>
-      <line x1="150" y1="30" x2="150" y2="24" stroke="#1D1330" stroke-width="2"/>`;
+    return `<rect x="112" y="82" width="56" height="12" rx="3" fill="#C9A227"/>
+      <rect x="116" y="70" width="48" height="12" rx="3" fill="#6E8F6B"/>
+      <rect x="120" y="58" width="40" height="12" rx="3" fill="#A6895B"/>
+      <circle cx="150" cy="44" r="9" fill="#fff" stroke="#2B2118" stroke-width="2"/>
+      <line x1="150" y1="30" x2="150" y2="24" stroke="#2B2118" stroke-width="2"/>`;
   }
   if(prop==="star"){
     return `<polygon points="150,40 156,55 172,55 159,65 164,80 150,71 136,80 141,65 128,55 144,55"
-      fill="#FFC93C" stroke="#1D1330" stroke-width="2" stroke-linejoin="round"/>`;
+      fill="#C9A227" stroke="#2B2118" stroke-width="2" stroke-linejoin="round"/>`;
   }
   if(prop==="cap"){
-    return `<polygon points="110,60 150,46 190,60 150,74" fill="#1D1330"/>
-      <rect x="140" y="60" width="20" height="16" fill="#1D1330"/>
-      <circle cx="150" cy="46" r="3" fill="#FFC93C"/>
-      <line x1="150" y1="46" x2="168" y2="66" stroke="#FFC93C" stroke-width="2"/>
-      <circle cx="168" cy="68" r="3" fill="#FFC93C"/>`;
+    return `<polygon points="110,60 150,46 190,60 150,74" fill="#2B2118"/>
+      <rect x="140" y="60" width="20" height="16" fill="#2B2118"/>
+      <circle cx="150" cy="46" r="3" fill="#C9A227"/>
+      <line x1="150" y1="46" x2="168" y2="66" stroke="#C9A227" stroke-width="2"/>
+      <circle cx="168" cy="68" r="3" fill="#C9A227"/>`;
   }
   return "";
 }
 
 function faceMarkup(mood){
   if(mood==="good"){
-    return `<circle cx="63" cy="128" r="4" fill="#1D1330"/>
-      <circle cx="87" cy="128" r="4" fill="#1D1330"/>
-      <path d="M60 116 Q63 111 68 114" stroke="#1D1330" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-      <path d="M82 114 Q87 111 90 116" stroke="#1D1330" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-      <path d="M60 142 Q75 156 90 142" stroke="#1D1330" stroke-width="3" fill="none" stroke-linecap="round"/>
-      <circle cx="54" cy="136" r="5" fill="#FF8FAE" opacity=".7"/>
-      <circle cx="96" cy="136" r="5" fill="#FF8FAE" opacity=".7"/>`;
+    return `<circle cx="63" cy="128" r="4" fill="#2B2118"/>
+      <circle cx="87" cy="128" r="4" fill="#2B2118"/>
+      <path d="M60 116 Q63 111 68 114" stroke="#2B2118" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <path d="M82 114 Q87 111 90 116" stroke="#2B2118" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <path d="M60 142 Q75 156 90 142" stroke="#2B2118" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <circle cx="54" cy="136" r="5" fill="#D9A98F" opacity=".7"/>
+      <circle cx="96" cy="136" r="5" fill="#D9A98F" opacity=".7"/>`;
   }
-  return `<circle cx="63" cy="129" r="3.4" fill="#1D1330"/>
-    <circle cx="87" cy="129" r="3.4" fill="#1D1330"/>
-    <path d="M58 113 Q63 119 70 116" stroke="#1D1330" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-    <path d="M80 116 Q87 119 92 113" stroke="#1D1330" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-    <path d="M62 148 Q68 143 75 147 Q82 143 88 148" stroke="#1D1330" stroke-width="3" fill="none" stroke-linecap="round"/>
-    <path d="M100 108 q6 8 0 16" stroke="#4FB6E8" stroke-width="3" fill="none" stroke-linecap="round" opacity=".8"/>`;
+  return `<circle cx="63" cy="129" r="3.4" fill="#2B2118"/>
+    <circle cx="87" cy="129" r="3.4" fill="#2B2118"/>
+    <path d="M58 113 Q63 119 70 116" stroke="#2B2118" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M80 116 Q87 119 92 113" stroke="#2B2118" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M62 148 Q68 143 75 147 Q82 143 88 148" stroke="#2B2118" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M100 108 q6 8 0 16" stroke="#B5652E" stroke-width="3" fill="none" stroke-linecap="round" opacity=".8"/>`;
 }
 
 function katieSVG(day, mood){
