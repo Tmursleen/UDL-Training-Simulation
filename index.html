@@ -23,101 +23,67 @@
     --clay:#B85C4A;
     --clay-dark:#8F4636;
     --line:#E3D9C2;
-    --radius:26px;
+    --bg:#F4EEE0;
   }
   *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
-  html{height:100%;}
+  html,body{margin:0;padding:0;height:100%;}
   body{
     font-family:'Poppins',sans-serif;
     color:var(--ink);
     height:100vh;
     width:100vw;
     overflow:hidden;
-    background:#F4EEE0;
-    position:relative;
+    background:var(--bg);
+  }
+
+  .app-shell{
     display:flex;
-    align-items:flex-start;
-    justify-content:center;
-  }
-  .wrap{
-    max-width:1080px;
+    flex-direction:column;
+    height:100%;
     width:100%;
+    max-width:1280px;
     margin:0 auto;
-    position:relative;
-    z-index:1;
-    padding:28px 16px 60px;
-    transform-origin:top center;
-  }
-
-  .app-card{
     background:var(--panel);
-    border-radius:36px;
-    padding:30px;
-    box-shadow:0 30px 70px rgba(43,33,24,.12);
   }
 
-  header{margin-bottom:18px;}
+  /* TOP BAR */
+  .top-bar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+    padding:14px 24px;
+    border-bottom:1px solid var(--line);
+    flex-wrap:wrap;
+    row-gap:8px;
+  }
+  .brand{min-width:0;}
   .eyebrow{
     font-family:'JetBrains Mono',monospace;
-    font-size:11.5px;
+    font-size:10.5px;
     letter-spacing:.14em;
     text-transform:uppercase;
     color:var(--gold-dark);
     font-weight:600;
-    margin-bottom:6px;
+    margin-bottom:2px;
   }
   h1{
     font-family:'Playfair Display',serif;
-    font-size:clamp(30px,4.6vw,42px);
+    font-size:clamp(18px,2.2vw,26px);
     font-weight:800;
-    margin:0 0 8px;
-    line-height:1.05;
+    margin:0;
+    line-height:1.1;
     color:var(--ink);
   }
-  .sub{color:var(--ink-soft);font-size:15px;max-width:560px;line-height:1.55;}
-
-  .layout{
-    display:grid;
-    grid-template-columns:1fr 300px;
-    gap:26px;
-    margin-top:22px;
-  }
-  @media(max-width:760px){.layout{grid-template-columns:1fr;}}
-
-  /* TABS */
-  .tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
-  .tab{
-    flex:1; min-width:130px;
-    background:var(--panel-2);
-    border:2px solid var(--line);
-    border-radius:16px;
-    padding:10px 14px;
-    cursor:pointer;
-    transition:all .2s ease;
-    text-align:left;
-  }
-  .tab:disabled{cursor:not-allowed;opacity:.45;}
-  .tab .tnum{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--ink-soft);letter-spacing:.06em;}
-  .tab .tname{font-family:'Playfair Display',serif;font-weight:700;font-size:14.5px;margin-top:1px;}
-  .tab.active{border-color:var(--gold);background:#F3E9D2;}
-  .tab.done .tnum::after{content:" ✓";color:var(--sage);}
-
-  /* HUD */
-  .hud{
-    background:var(--panel-2);
-    border:1px solid var(--line);
-    border-radius:20px;
-    padding:14px 18px;
+  .hud-inline{
     display:flex;
     align-items:center;
-    gap:16px;
-    margin-bottom:18px;
+    gap:14px;
     flex-wrap:wrap;
   }
-  .meter-label{font-family:'Playfair Display',serif;font-weight:700;font-size:14px;min-width:150px;}
+  .meter-label{font-family:'Playfair Display',serif;font-weight:700;font-size:13px;white-space:nowrap;}
   .gauge{
-    flex:1; min-width:160px; height:16px;
+    width:140px; height:12px;
     background:#fff;
     border:1px solid var(--line);
     border-radius:99px;
@@ -131,38 +97,105 @@
   }
   .gauge-fill.low{background:linear-gradient(90deg,#7A3A2C,var(--clay));}
   .gauge-fill.high{background:linear-gradient(90deg,#3E5940,var(--sage));}
-  .gauge-num{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;min-width:34px;text-align:right;}
+  .gauge-num{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;min-width:26px;text-align:right;}
   .badges{display:flex;gap:6px;flex-wrap:wrap;}
   .badge{
-    font-family:'JetBrains Mono',monospace;font-size:10.5px;
-    background:var(--brown); color:#fff; padding:4px 9px;
-    border-radius:99px; font-weight:600;
+    font-family:'JetBrains Mono',monospace;font-size:10px;
+    background:var(--brown); color:#FBF6EA; padding:3px 8px;
+    border-radius:99px; font-weight:600; white-space:nowrap;
   }
 
-  /* STAGE */
-  .stage h2{font-family:'Playfair Display',serif;font-size:22px;margin:0 0 6px;}
-  .scenario{color:var(--ink-soft);font-size:14px;line-height:1.6;margin-bottom:16px;max-width:600px;}
-  .board{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-  @media(max-width:640px){.board{grid-template-columns:1fr;}}
+  /* TABS / PAGE NAV */
+  .tabs{
+    display:flex; gap:8px; padding:10px 24px;
+    border-bottom:1px solid var(--line);
+    overflow-x:auto;
+  }
+  .tab{
+    flex:0 0 auto; min-width:120px;
+    background:var(--panel-2);
+    border:2px solid var(--line);
+    border-radius:14px;
+    padding:7px 12px;
+    cursor:pointer;
+    transition:all .2s ease;
+    text-align:left;
+  }
+  .tab:disabled{cursor:not-allowed;opacity:.45;}
+  .tab .tnum{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink-soft);letter-spacing:.06em;}
+  .tab .tname{font-family:'Playfair Display',serif;font-weight:700;font-size:13.5px;margin-top:0;}
+  .tab.active{border-color:var(--gold);background:#F3E9D2;}
+  .tab.done .tnum::after{content:" ✓";color:var(--sage);}
+
+  /* SLIDER */
+  .slider-viewport{
+    position:relative;
+    flex:1;
+    min-height:0;
+    overflow:hidden;
+  }
+  .slider-track{
+    display:flex;
+    height:100%;
+    transition:transform .5s cubic-bezier(.65,0,.35,1);
+  }
+  .slide{
+    flex:0 0 100%;
+    width:100%;
+    height:100%;
+    overflow-y:auto;
+    padding:20px 24px 28px;
+  }
+  .slide-grid{
+    display:grid;
+    grid-template-columns:1fr 260px;
+    gap:22px;
+    align-items:start;
+  }
+  @media(max-width:720px){ .slide-grid{grid-template-columns:1fr;} }
+
+  .nav-arrow{
+    position:absolute; top:50%; transform:translateY(-50%);
+    width:38px; height:38px; border-radius:50%;
+    border:1px solid var(--line);
+    background:rgba(255,255,255,.92);
+    color:var(--ink);
+    font-size:17px; line-height:1;
+    cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 6px 16px rgba(43,33,24,.14);
+    z-index:5;
+    transition:opacity .15s ease, transform .15s ease;
+  }
+  .nav-arrow:hover{transform:translateY(-50%) scale(1.06);}
+  .nav-arrow:disabled{opacity:0; pointer-events:none;}
+  .nav-arrow.prev{left:10px;}
+  .nav-arrow.next{right:10px;}
+
+  /* STAGE CONTENT */
+  .stage h2{font-family:'Playfair Display',serif;font-size:19px;margin:0 0 6px;}
+  .scenario{color:var(--ink-soft);font-size:13.5px;line-height:1.6;margin-bottom:14px;}
+  .board{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media(max-width:560px){.board{grid-template-columns:1fr;}}
   .col-title{
-    font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.09em;
-    text-transform:uppercase;color:var(--ink-soft);font-weight:600;margin-bottom:8px;
+    font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.09em;
+    text-transform:uppercase;color:var(--ink-soft);font-weight:600;margin-bottom:7px;
   }
   .pool, .dropzone{
     background:var(--panel-2);
     border:2px dashed var(--line);
-    border-radius:18px;
-    padding:12px;
-    min-height:190px;
-    display:flex; flex-direction:column; gap:8px;
+    border-radius:16px;
+    padding:10px;
+    min-height:150px;
+    display:flex; flex-direction:column; gap:7px;
   }
   .dropzone.dragover{border-color:var(--gold);background:#F3E9D2;}
   .card{
     background:#fff;
     border:1px solid var(--line);
-    border-radius:14px;
-    padding:10px 12px;
-    font-size:13.5px;
+    border-radius:12px;
+    padding:9px 11px;
+    font-size:13px;
     font-weight:500;
     cursor:grab;
     user-select:none; touch-action:none;
@@ -174,7 +207,7 @@
   .card.dragging{opacity:.35;}
   .card.placed-good{border-color:var(--sage);background:#EAF1E6;}
   .card.placed-bad{border-color:var(--clay);background:#F8E9E4;}
-  .card .emo{font-size:16px;}
+  .card .emo{font-size:15px;}
   .drag-ghost{
     position:fixed; pointer-events:none; z-index:999;
     background:#fff; border:1px solid var(--gold); border-radius:14px;
@@ -182,16 +215,16 @@
     box-shadow:0 8px 20px rgba(43,33,24,.2);
     display:flex; align-items:center; gap:8px;
   }
-  .hint{font-size:12px;color:var(--ink-soft);margin-top:4px;}
-  .toast{font-size:12px;font-weight:600;padding:5px 9px;border-radius:8px;margin-top:2px;display:inline-block;}
+  .hint{font-size:11.5px;color:var(--ink-soft);margin-top:4px;}
+  .toast{font-size:11px;font-weight:600;padding:4px 8px;border-radius:8px;margin-top:2px;display:inline-block;}
   .toast.good{background:#EAF1E6;color:#3E5940;}
   .toast.bad{background:#F8E9E4;color:var(--clay);}
 
-  .actions{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+  .actions{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
   button.primary{
-    font-family:'Poppins',sans-serif; font-weight:600; font-size:13.5px; letter-spacing:.02em;
+    font-family:'Poppins',sans-serif; font-weight:600; font-size:13px; letter-spacing:.02em;
     background:var(--brown); color:#FBF6EA; border:none; border-radius:99px;
-    padding:12px 24px; cursor:pointer; text-transform:uppercase;
+    padding:11px 22px; cursor:pointer; text-transform:uppercase;
     box-shadow:0 8px 18px rgba(59,46,34,.32);
     transition:background .15s ease, transform .1s ease;
   }
@@ -199,48 +232,51 @@
   button.primary:active{transform:translateY(1px);}
   button.primary:disabled{background:#DCD3BF;box-shadow:none;cursor:not-allowed;}
   button.ghost{
-    font-family:'Poppins',sans-serif; font-weight:600; font-size:12.5px;
+    font-family:'Poppins',sans-serif; font-weight:600; font-size:12px;
     background:transparent; color:var(--ink-soft); border:1px solid var(--line);
-    border-radius:99px; padding:11px 18px; cursor:pointer;
+    border-radius:99px; padding:10px 16px; cursor:pointer;
+  }
+  .locked-note{
+    display:flex; align-items:center; justify-content:center; height:100%;
+    color:var(--ink-soft); font-size:14px; text-align:center; padding:40px;
   }
 
   /* FEEDBACK */
-  .feedback{margin-top:18px;border-top:1px solid var(--line);padding-top:16px;display:none;}
+  .feedback{margin-top:16px;border-top:1px solid var(--line);padding-top:14px;display:none;}
   .feedback.show{display:block;animation:fadein .4s ease;}
   @keyframes fadein{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
-  .fb-block{border-radius:16px;padding:14px 16px;margin-bottom:10px;}
+  .fb-block{border-radius:14px;padding:12px 14px;margin-bottom:9px;}
   .fb-outcome{background:#EAF1E6;border:1px solid var(--sage);}
   .fb-theory{background:var(--panel-2);border:1px solid var(--line);}
-  .fb-title{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;margin-bottom:6px;color:var(--ink-soft);}
-  .fb-body{font-size:14px;line-height:1.6;}
-  .fb-ref{font-size:12px;color:var(--ink-soft);margin-top:8px;font-style:italic;}
+  .fb-title{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;margin-bottom:5px;color:var(--ink-soft);}
+  .fb-body{font-size:13.5px;line-height:1.6;}
+  .fb-ref{font-size:11.5px;color:var(--ink-soft);margin-top:7px;font-style:italic;}
 
-  .end-screen{text-align:center;padding:36px 16px;}
-  .end-screen h2{font-family:'Playfair Display',serif;font-size:28px;margin-bottom:10px;}
-  .end-screen p{color:var(--ink-soft);max-width:480px;margin:0 auto 18px;line-height:1.6;}
+  .end-slide{display:flex;align-items:center;justify-content:center;height:100%;}
+  .end-screen{text-align:center;padding:20px 16px;max-width:520px;}
+  .end-screen h2{font-family:'Playfair Display',serif;font-size:24px;margin-bottom:10px;}
+  .end-screen p{color:var(--ink-soft);margin:0 auto 16px;line-height:1.6;font-size:14px;}
 
   /* KATIE PANEL */
   .katie-panel{
     background:linear-gradient(160deg, var(--brown), var(--gold) 60%, var(--rust));
-    border-radius:24px;
-    padding:20px 16px;
+    border-radius:20px;
+    padding:16px 14px;
     display:flex; flex-direction:column; align-items:center;
-    position:sticky; top:20px;
     color:#fff;
-    min-height:360px;
   }
   .katie-day{
     font-family:'JetBrains Mono',monospace;
-    font-size:11px; letter-spacing:.1em; text-transform:uppercase;
+    font-size:10.5px; letter-spacing:.1em; text-transform:uppercase;
     background:rgba(255,255,255,.18);
-    padding:4px 12px; border-radius:99px; margin-bottom:12px;
+    padding:4px 11px; border-radius:99px; margin-bottom:10px;
   }
-  .katie-svg-wrap{width:100%;max-width:210px;margin-bottom:12px;}
+  .katie-svg-wrap{width:100%;max-width:170px;margin-bottom:10px;}
   .katie-svg-wrap svg{width:100%;height:auto;display:block;}
   .speech{
     background:#fff; color:var(--ink);
-    border-radius:16px; padding:12px 14px;
-    font-size:13px; font-weight:500; line-height:1.45;
+    border-radius:14px; padding:10px 12px;
+    font-size:12.5px; font-weight:500; line-height:1.45;
     position:relative; text-align:center;
     box-shadow:0 6px 16px rgba(0,0,0,.15);
   }
@@ -248,37 +284,30 @@
     content:""; position:absolute; top:-8px; left:50%; transform:translateX(-50%);
     border-left:8px solid transparent; border-right:8px solid transparent; border-bottom:8px solid #fff;
   }
-  .katie-name{font-family:'Playfair Display',serif;font-weight:700;font-size:15px;margin-top:14px;}
+  .katie-name{font-family:'Playfair Display',serif;font-weight:700;font-size:14px;margin-top:12px;}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="app-card">
-    <header>
+<div class="app-shell">
+  <div class="top-bar">
+    <div class="brand">
       <div class="eyebrow">UDL Training Simulation</div>
       <h1>A Day in Katie's Shoes</h1>
-      <p class="sub">You're the instructional designer. Drag choices in to help Katie — an employee with ADHD — get through her first week of workplace training. Submit whenever you feel you've done enough. Not every option helps, so choose with care.</p>
-    </header>
-
-    <div class="layout">
-      <div>
-        <div class="tabs" id="tabs"></div>
-        <div class="hud">
-          <div class="meter-label" id="meterLabel">Engagement Meter</div>
-          <div class="gauge"><div class="gauge-fill" id="gaugeFill" style="width:50%"></div></div>
-          <div class="gauge-num" id="gaugeNum">50</div>
-          <div class="badges" id="badges"></div>
-        </div>
-        <div class="stage" id="stage"></div>
-      </div>
-
-      <div class="katie-panel">
-        <div class="katie-day" id="katieDay">Day 1</div>
-        <div class="katie-svg-wrap" id="katieSvg"></div>
-        <div class="speech" id="katieSpeech">Ready to start the day...</div>
-        <div class="katie-name">Katie</div>
-      </div>
     </div>
+    <div class="hud-inline">
+      <div class="meter-label" id="meterLabel">Engagement Meter</div>
+      <div class="gauge"><div class="gauge-fill" id="gaugeFill" style="width:50%"></div></div>
+      <div class="gauge-num" id="gaugeNum">50</div>
+      <div class="badges" id="badges"></div>
+    </div>
+  </div>
+
+  <div class="tabs" id="tabs"></div>
+
+  <div class="slider-viewport">
+    <button class="nav-arrow prev" id="prevBtn" aria-label="Previous">‹</button>
+    <div class="slider-track" id="track"></div>
+    <button class="nav-arrow next" id="nextBtn" aria-label="Next">›</button>
   </div>
 </div>
 
@@ -437,6 +466,7 @@ function katieSVG(day, mood){
 /* ---------- STATE ---------- */
 let state = {
   currentDay: 0,
+  showEnd: false,
   meter: 50,
   unlocked: [true,false,false,false],
   completed: [false,false,false,false],
@@ -446,29 +476,62 @@ let state = {
 };
 
 const tabsEl = document.getElementById('tabs');
-const stageEl = document.getElementById('stage');
+const trackEl = document.getElementById('track');
 const gaugeFill = document.getElementById('gaugeFill');
 const gaugeNum = document.getElementById('gaugeNum');
 const meterLabel = document.getElementById('meterLabel');
 const badgesEl = document.getElementById('badges');
-const katieDayEl = document.getElementById('katieDay');
-const katieSvgEl = document.getElementById('katieSvg');
-const katieSpeechEl = document.getElementById('katieSpeech');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
 
+let dragged = null;
+let ghost = null;
+
+/* ---------- NAVIGATION ---------- */
+function currentSlideIndex(){ return state.showEnd ? DAYS.length : state.currentDay; }
+
+function goToDay(i){
+  if(i<0 || i>=DAYS.length || !state.unlocked[i]) return;
+  state.currentDay = i;
+  state.showEnd = false;
+  renderAll();
+}
+function goToEnd(){ state.showEnd = true; renderAll(); }
+
+function updateTrackPosition(){
+  trackEl.style.transform = `translateX(-${currentSlideIndex() * 100}%)`;
+}
+
+prevBtn.onclick = ()=>{
+  if(state.showEnd){ goToDay(DAYS.length-1); return; }
+  if(state.currentDay>0) goToDay(state.currentDay-1);
+};
+nextBtn.onclick = ()=>{
+  if(state.showEnd) return;
+  const isLast = state.currentDay === DAYS.length-1;
+  if(isLast){
+    if(state.completed[state.currentDay]) goToEnd();
+  } else if(state.unlocked[state.currentDay+1]){
+    goToDay(state.currentDay+1);
+  }
+};
+
+/* ---------- RENDER: TABS ---------- */
 function renderTabs(){
   tabsEl.innerHTML = '';
   DAYS.forEach((d,i)=>{
     const btn = document.createElement('button');
-    btn.className = 'tab' + (i===state.currentDay?' active':'') + (state.completed[i]?' done':'');
+    btn.className = 'tab' + (!state.showEnd && i===state.currentDay?' active':'') + (state.completed[i]?' done':'');
     btn.disabled = !state.unlocked[i];
     btn.innerHTML = `<div class="tnum">Day ${d.id}</div><div class="tname">${d.name}</div>`;
-    btn.onclick = ()=>{ if(state.unlocked[i]){ state.currentDay = i; renderAll(); } };
+    btn.onclick = ()=> goToDay(i);
     tabsEl.appendChild(btn);
   });
 }
 
+/* ---------- RENDER: HUD ---------- */
 function renderHUD(){
-  const d = DAYS[state.currentDay];
+  const d = DAYS[state.showEnd ? DAYS.length-1 : state.currentDay];
   meterLabel.textContent = d.meterLabel;
   const pct = Math.max(0, Math.min(100, state.meter));
   gaugeFill.style.width = pct + '%';
@@ -479,53 +542,84 @@ function renderHUD(){
   badgesEl.innerHTML = state.badges.map(b=>`<span class="badge">${b}</span>`).join('');
 }
 
-function renderKatie(){
-  const d = DAYS[state.currentDay];
-  const mood = state.meter >= 50 ? 'good' : 'bad';
-  katieDayEl.textContent = 'Day ' + d.id;
-  katieSvgEl.innerHTML = katieSVG(d, mood);
-  katieSpeechEl.textContent = d.speech[mood];
+/* ---------- RENDER: SLIDES ---------- */
+function buildSlideShells(){
+  trackEl.innerHTML = '';
+  DAYS.forEach((d,i)=>{
+    const slide = document.createElement('div');
+    slide.className = 'slide';
+    slide.id = 'slide-' + i;
+    trackEl.appendChild(slide);
+  });
+  const endSlide = document.createElement('div');
+  endSlide.className = 'slide end-slide';
+  endSlide.id = 'slide-end';
+  trackEl.appendChild(endSlide);
 }
 
-let dragged = null;
-let ghost = null;
+function katieMarkup(dayIdx){
+  const d = DAYS[dayIdx];
+  const mood = state.meter >= 50 ? 'good' : 'bad';
+  return `
+    <div class="katie-panel">
+      <div class="katie-day">Day ${d.id}</div>
+      <div class="katie-svg-wrap">${katieSVG(d, mood)}</div>
+      <div class="speech">${d.speech[mood]}</div>
+      <div class="katie-name">Katie</div>
+    </div>`;
+}
 
-function renderStage(){
-  const d = DAYS[state.currentDay];
-  const placements = state.dayPlacements[state.currentDay] || {};
+function renderDaySlide(i){
+  const slide = document.getElementById('slide-' + i);
+  if(!slide) return;
+  const d = DAYS[i];
+
+  if(!state.unlocked[i]){
+    slide.innerHTML = `<div class="locked-note">Complete Day ${i} to unlock this page.</div>`;
+    return;
+  }
+
+  const placements = state.dayPlacements[i] || {};
   const placedCount = Object.keys(placements).length;
+  const isCompleted = state.completed[i];
+  const isLast = i === DAYS.length - 1;
 
-  stageEl.innerHTML = `
-    <h2>${d.title}</h2>
-    <p class="scenario">${d.scenario}</p>
-    <div class="board">
-      <div>
-        <div class="col-title">${d.poolTitle}</div>
-        <div class="pool" id="pool"></div>
+  slide.innerHTML = `
+    <div class="slide-grid">
+      <div class="stage">
+        <h2>${d.title}</h2>
+        <p class="scenario">${d.scenario}</p>
+        <div class="board">
+          <div>
+            <div class="col-title">${d.poolTitle}</div>
+            <div class="pool" id="pool-${i}"></div>
+          </div>
+          <div>
+            <div class="col-title">${d.zoneTitle}</div>
+            <div class="dropzone" id="dropzone-${i}"></div>
+          </div>
+        </div>
+        <p class="hint">Drag cards into ${d.zoneTitle}, then submit whenever you feel you've done enough for Katie.</p>
+        <div class="actions" id="actions-${i}">
+          ${isCompleted ? '' : `<button class="primary" id="completeBtn-${i}" ${placedCount>0?'':'disabled'}>Submit &amp; See Results</button>
+          <button class="ghost" id="resetBtn-${i}">Reset Day</button>`}
+        </div>
+        <div class="feedback${isCompleted?' show':''}" id="feedback-${i}">${isCompleted ? feedbackMarkup(d, i, isLast) : ''}</div>
       </div>
-      <div>
-        <div class="col-title">${d.zoneTitle}</div>
-        <div class="dropzone" id="dropzone"></div>
-      </div>
+      ${katieMarkup(i)}
     </div>
-    <p class="hint">Drag cards into ${d.zoneTitle}, then submit whenever you feel you've done enough for Katie.</p>
-    <div class="actions">
-      <button class="primary" id="completeBtn" ${placedCount>0?'':'disabled'}>Submit &amp; See Results</button>
-      <button class="ghost" id="resetBtn">Reset Day</button>
-    </div>
-    <div class="feedback" id="feedback"></div>
   `;
 
-  const pool = document.getElementById('pool');
-  const dropzone = document.getElementById('dropzone');
+  const pool = document.getElementById('pool-' + i);
+  const dropzone = document.getElementById('dropzone-' + i);
 
   d.items.forEach((item,idx)=>{
     if(placements[idx]) return;
-    pool.appendChild(makeCard(item, idx, d));
+    pool.appendChild(makeCard(item, idx, i));
   });
   d.items.forEach((item,idx)=>{
     if(!placements[idx]) return;
-    const c = makeCard(item, idx, d, true);
+    const c = makeCard(item, idx, i, true);
     c.classList.add(placements[idx]==='good' ? 'placed-good' : 'placed-bad');
     const toast = document.createElement('div');
     toast.className = 'toast ' + (placements[idx]==='good'?'good':'bad');
@@ -541,90 +635,26 @@ function renderStage(){
     dropzone.innerHTML = '<div class="hint">Nothing placed yet.</div>';
   }
 
-  document.getElementById('completeBtn').onclick = ()=> completeDay(d);
-  document.getElementById('resetBtn').onclick = ()=> {
-    state.meter -= (state.dayContribution[state.currentDay] || 0);
-    state.dayContribution[state.currentDay] = 0;
-    state.dayPlacements[state.currentDay] = {};
-    renderAll();
-  };
-}
-
-function makeCard(item, idx, d, placed){
-  const c = document.createElement('div');
-  c.className = 'card';
-  c.innerHTML = `<span class="emo">${item.emo}</span><span>${item.label}</span>`;
-  if(!placed){
-    c.addEventListener('pointerdown', (e)=>startDrag(e, item, idx, c, d));
+  if(!isCompleted){
+    const completeBtn = document.getElementById('completeBtn-' + i);
+    const resetBtn = document.getElementById('resetBtn-' + i);
+    if(completeBtn) completeBtn.onclick = ()=> completeDay(i);
+    if(resetBtn) resetBtn.onclick = ()=>{
+      state.meter -= (state.dayContribution[i] || 0);
+      state.dayContribution[i] = 0;
+      state.dayPlacements[i] = {};
+      renderAll();
+    };
+  } else {
+    attachFeedbackHandlers(i, isLast);
   }
-  return c;
 }
 
-function startDrag(e, item, idx, cardEl, d){
-  e.preventDefault();
-  dragged = {item, idx, d};
-  cardEl.classList.add('dragging');
-
-  ghost = document.createElement('div');
-  ghost.className = 'drag-ghost';
-  ghost.innerHTML = `<span class="emo">${item.emo}</span><span>${item.label}</span>`;
-  document.body.appendChild(ghost);
-  moveGhost(e);
-
-  function onMove(ev){ moveGhost(ev); highlightDropzone(ev); }
-  function onUp(ev){
-    document.removeEventListener('pointermove', onMove);
-    document.removeEventListener('pointerup', onUp);
-    const dz = document.getElementById('dropzone');
-    const rect = dz.getBoundingClientRect();
-    const inside = ev.clientX>=rect.left && ev.clientX<=rect.right && ev.clientY>=rect.top && ev.clientY<=rect.bottom;
-    dz.classList.remove('dragover');
-    ghost.remove();
-    cardEl.classList.remove('dragging');
-    if(inside){ placeItem(d, idx, item); }
-    dragged = null;
-  }
-  document.addEventListener('pointermove', onMove);
-  document.addEventListener('pointerup', onUp);
-}
-
-function moveGhost(e){
-  if(!ghost) return;
-  ghost.style.left = (e.clientX+12) + 'px';
-  ghost.style.top = (e.clientY+12) + 'px';
-}
-function highlightDropzone(e){
-  const dz = document.getElementById('dropzone');
-  const rect = dz.getBoundingClientRect();
-  const inside = e.clientX>=rect.left && e.clientX<=rect.right && e.clientY>=rect.top && e.clientY<=rect.bottom;
-  dz.classList.toggle('dragover', inside);
-}
-
-function placeItem(d, idx, item){
-  if(!state.dayPlacements[state.currentDay]) state.dayPlacements[state.currentDay] = {};
-  state.dayPlacements[state.currentDay][idx] = item.good ? 'good' : 'bad';
-  const delta = item.good ? GOOD_DELTA : BAD_DELTA;
-  state.meter = Math.max(0, Math.min(100, state.meter + delta));
-  state.dayContribution[state.currentDay] = (state.dayContribution[state.currentDay] || 0) + delta;
-  renderAll();
-}
-
-function completeDay(d){
-  const placements = state.dayPlacements[state.currentDay] || {};
+function feedbackMarkup(d, i, isLast){
+  const placements = state.dayPlacements[i] || {};
   const goodCount = Object.values(placements).filter(v=>v==='good').length;
   const badCount = Object.values(placements).filter(v=>v==='bad').length;
-
-  state.completed[state.currentDay] = true;
-  if(state.currentDay+1 < DAYS.length) state.unlocked[state.currentDay+1] = true;
-  if(!state.badges.includes(d.badge)) state.badges.push(d.badge);
-
-  renderHUD();
-  renderKatie();
-
-  const fb = document.getElementById('feedback');
-  fb.classList.add('show');
-  const isLast = state.currentDay === DAYS.length - 1;
-  fb.innerHTML = `
+  return `
     <div class="fb-block fb-outcome">
       <div class="fb-title">Learning Outcome</div>
       <div class="fb-body">${d.outcome}</div>
@@ -636,64 +666,130 @@ function completeDay(d){
       <div class="fb-ref">${d.ref}</div>
     </div>
     <div class="actions">
-      ${isLast ? '<button class="primary" id="finishBtn">Finish Training</button>' : '<button class="primary" id="nextBtn">Continue to Day '+(d.id+1)+'</button>'}
+      ${isLast ? '<button class="primary" id="finishBtn">Finish Training</button>' : `<button class="primary" id="nextBtn-${i}">Continue to Day ${i+2}</button>`}
     </div>
   `;
-  document.getElementById('completeBtn').remove();
-  document.getElementById('resetBtn').style.display = 'none';
-
-  if(isLast){
-    document.getElementById('finishBtn').onclick = renderEndScreen;
-  } else {
-    document.getElementById('nextBtn').onclick = ()=>{
-      state.currentDay += 1;
-      renderAll();
-    };
-  }
-  renderTabs();
 }
 
-function renderEndScreen(){
-  stageEl.innerHTML = `
+function attachFeedbackHandlers(i, isLast){
+  if(isLast){
+    const finishBtn = document.getElementById('finishBtn');
+    if(finishBtn) finishBtn.onclick = goToEnd;
+  } else {
+    const nextDayBtn = document.getElementById('nextBtn-' + i);
+    if(nextDayBtn) nextDayBtn.onclick = ()=> goToDay(i+1);
+  }
+}
+
+function makeCard(item, idx, dayIdx, placed){
+  const c = document.createElement('div');
+  c.className = 'card';
+  c.innerHTML = `<span class="emo">${item.emo}</span><span>${item.label}</span>`;
+  if(!placed){
+    c.addEventListener('pointerdown', (e)=>startDrag(e, item, idx, c, dayIdx));
+  }
+  return c;
+}
+
+function startDrag(e, item, idx, cardEl, dayIdx){
+  e.preventDefault();
+  dragged = {item, idx, dayIdx};
+  cardEl.classList.add('dragging');
+
+  ghost = document.createElement('div');
+  ghost.className = 'drag-ghost';
+  ghost.innerHTML = `<span class="emo">${item.emo}</span><span>${item.label}</span>`;
+  document.body.appendChild(ghost);
+  moveGhost(e);
+
+  function onMove(ev){ moveGhost(ev); highlightDropzone(ev, dayIdx); }
+  function onUp(ev){
+    document.removeEventListener('pointermove', onMove);
+    document.removeEventListener('pointerup', onUp);
+    const dz = document.getElementById('dropzone-' + dayIdx);
+    const rect = dz.getBoundingClientRect();
+    const inside = ev.clientX>=rect.left && ev.clientX<=rect.right && ev.clientY>=rect.top && ev.clientY<=rect.bottom;
+    dz.classList.remove('dragover');
+    ghost.remove();
+    cardEl.classList.remove('dragging');
+    if(inside){ placeItem(dayIdx, idx, item); }
+    dragged = null;
+  }
+  document.addEventListener('pointermove', onMove);
+  document.addEventListener('pointerup', onUp);
+}
+
+function moveGhost(e){
+  if(!ghost) return;
+  ghost.style.left = (e.clientX+12) + 'px';
+  ghost.style.top = (e.clientY+12) + 'px';
+}
+function highlightDropzone(e, dayIdx){
+  const dz = document.getElementById('dropzone-' + dayIdx);
+  const rect = dz.getBoundingClientRect();
+  const inside = e.clientX>=rect.left && e.clientX<=rect.right && e.clientY>=rect.top && e.clientY<=rect.bottom;
+  dz.classList.toggle('dragover', inside);
+}
+
+function placeItem(dayIdx, idx, item){
+  if(!state.dayPlacements[dayIdx]) state.dayPlacements[dayIdx] = {};
+  state.dayPlacements[dayIdx][idx] = item.good ? 'good' : 'bad';
+  const delta = item.good ? GOOD_DELTA : BAD_DELTA;
+  state.meter = Math.max(0, Math.min(100, state.meter + delta));
+  state.dayContribution[dayIdx] = (state.dayContribution[dayIdx] || 0) + delta;
+  renderAll();
+}
+
+function completeDay(i){
+  state.completed[i] = true;
+  if(i+1 < DAYS.length) state.unlocked[i+1] = true;
+  const d = DAYS[i];
+  if(!state.badges.includes(d.badge)) state.badges.push(d.badge);
+  renderAll();
+}
+
+function renderEndSlide(){
+  const slide = document.getElementById('slide-end');
+  slide.innerHTML = `
     <div class="end-screen">
       <h2>🎓 Katie completed her training</h2>
       <p>Across four days, you applied Behaviourism, Cognitivism, Constructivism, and Social Learning Theory through Universal Design for Learning — turning a week that could have shut Katie out into one that let her succeed.</p>
       <div class="badges" style="justify-content:center;">${state.badges.map(b=>`<span class="badge">${b}</span>`).join('')}</div>
-      <div class="actions" style="justify-content:center;margin-top:22px;">
+      <div class="actions" style="justify-content:center;margin-top:20px;">
         <button class="primary" id="replayBtn">Play Again</button>
       </div>
     </div>
   `;
   document.getElementById('replayBtn').onclick = ()=>{
-    state = {currentDay:0, meter:50, unlocked:[true,false,false,false], completed:[false,false,false,false], badges:[], dayPlacements:{}, dayContribution:{}};
+    state = {currentDay:0, showEnd:false, meter:50, unlocked:[true,false,false,false], completed:[false,false,false,false], badges:[], dayPlacements:{}, dayContribution:{}};
     renderAll();
   };
 }
 
+/* ---------- NAV ARROW STATE ---------- */
+function updateNavArrows(){
+  if(state.showEnd){
+    prevBtn.disabled = false;
+    nextBtn.disabled = true;
+    return;
+  }
+  prevBtn.disabled = state.currentDay === 0;
+  const isLast = state.currentDay === DAYS.length-1;
+  nextBtn.disabled = isLast ? !state.completed[state.currentDay] : !state.unlocked[state.currentDay+1];
+}
+
+/* ---------- MASTER RENDER ---------- */
 function renderAll(){
   renderTabs();
   renderHUD();
-  renderKatie();
-  renderStage();
-  fitToViewport();
+  DAYS.forEach((d,i)=> renderDaySlide(i));
+  renderEndSlide();
+  updateTrackPosition();
+  updateNavArrows();
 }
 
-/* ---------- SCALE TO FIT (no scrollbars when embedded) ---------- */
-const wrapEl = document.querySelector('.wrap');
-function fitToViewport(){
-  requestAnimationFrame(()=>{
-    wrapEl.style.transform = 'scale(1)';
-    const naturalW = wrapEl.offsetWidth;
-    const naturalH = wrapEl.offsetHeight;
-    const scale = Math.min(window.innerWidth / naturalW, window.innerHeight / naturalH, 1);
-    wrapEl.style.transform = `scale(${scale})`;
-  });
-}
-window.addEventListener('load', fitToViewport);
-window.addEventListener('resize', fitToViewport);
-
+buildSlideShells();
 renderAll();
-
 </script>
 </body>
 </html>
