@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>A Day in Katie's Shoes — UDL Training Simulation</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,500;1,600&family=Poppins:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
@@ -24,13 +24,14 @@
     --clay-dark:#8F4636;
     --line:#E3D9C2;
     --bg:#F4EEE0;
+    --app-height:100dvh;
+    --nav-h:64px;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;height:100%;}
   body{
     font-family:'Poppins',sans-serif;
     color:var(--ink);
-    height:100vh;
     width:100vw;
     overflow:hidden;
     background:var(--bg);
@@ -39,11 +40,13 @@
   .app-shell{
     display:flex;
     flex-direction:column;
-    height:100%;
+    height:var(--app-height);
+    min-height:280px;
     width:100%;
     max-width:1280px;
     margin:0 auto;
     background:var(--panel);
+    overflow:hidden;
   }
 
   /* TOP BAR */
@@ -51,39 +54,40 @@
     display:flex;
     align-items:center;
     justify-content:space-between;
-    gap:20px;
-    padding:14px 24px;
+    gap:16px;
+    padding:clamp(8px,1.6vh,14px) clamp(14px,2.5vw,24px);
     border-bottom:1px solid var(--line);
     flex-wrap:wrap;
-    row-gap:8px;
+    row-gap:6px;
+    flex-shrink:0;
   }
   .brand{min-width:0;}
   .eyebrow{
     font-family:'JetBrains Mono',monospace;
-    font-size:10.5px;
+    font-size:10px;
     letter-spacing:.14em;
     text-transform:uppercase;
     color:var(--gold-dark);
     font-weight:600;
     margin-bottom:2px;
   }
+  h1,h2{margin:0;}
   h1{
     font-family:'Playfair Display',serif;
-    font-size:clamp(18px,2.2vw,26px);
+    font-size:clamp(16px,2.1vw,24px);
     font-weight:800;
-    margin:0;
     line-height:1.1;
     color:var(--ink);
   }
   .hud-inline{
     display:flex;
     align-items:center;
-    gap:14px;
+    gap:12px;
     flex-wrap:wrap;
   }
-  .meter-label{font-family:'Playfair Display',serif;font-weight:700;font-size:13px;white-space:nowrap;}
+  .meter-label{font-family:'Playfair Display',serif;font-weight:700;font-size:12.5px;white-space:nowrap;}
   .gauge{
-    width:140px; height:12px;
+    width:120px; height:11px;
     background:#fff;
     border:1px solid var(--line);
     border-radius:99px;
@@ -97,105 +101,108 @@
   }
   .gauge-fill.low{background:linear-gradient(90deg,#7A3A2C,var(--clay));}
   .gauge-fill.high{background:linear-gradient(90deg,#3E5940,var(--sage));}
-  .gauge-num{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;min-width:26px;text-align:right;}
+  .gauge-num{font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:600;min-width:24px;text-align:right;}
   .badges{display:flex;gap:6px;flex-wrap:wrap;}
   .badge{
-    font-family:'JetBrains Mono',monospace;font-size:10px;
+    font-family:'JetBrains Mono',monospace;font-size:9.5px;
     background:var(--brown); color:#FBF6EA; padding:3px 8px;
     border-radius:99px; font-weight:600; white-space:nowrap;
   }
 
   /* TABS / PAGE NAV */
   .tabs{
-    display:flex; gap:8px; padding:10px 24px;
+    display:flex; gap:8px; padding:clamp(6px,1.2vh,10px) clamp(14px,2.5vw,24px);
     border-bottom:1px solid var(--line);
     overflow-x:auto;
+    flex-shrink:0;
+    -ms-overflow-style:none; scrollbar-width:thin;
   }
   .tab{
-    flex:0 0 auto; min-width:120px;
+    flex:0 0 auto; min-width:104px;
     background:var(--panel-2);
     border:2px solid var(--line);
-    border-radius:14px;
-    padding:7px 12px;
+    border-radius:13px;
+    padding:6px 11px;
     cursor:pointer;
     transition:all .2s ease;
     text-align:left;
   }
   .tab:disabled{cursor:not-allowed;opacity:.45;}
-  .tab .tnum{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink-soft);letter-spacing:.06em;}
-  .tab .tname{font-family:'Playfair Display',serif;font-weight:700;font-size:13.5px;margin-top:0;}
+  .tab .tnum{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--ink-soft);letter-spacing:.06em;}
+  .tab .tname{font-family:'Playfair Display',serif;font-weight:700;font-size:13px;margin-top:0;}
   .tab.active{border-color:var(--gold);background:#F3E9D2;}
   .tab.done .tnum::after{content:" ✓";color:var(--sage);}
 
   /* SLIDER */
   .slider-viewport{
     position:relative;
-    flex:1;
+    flex:1 1 auto;
     min-height:0;
     overflow:hidden;
   }
   .slider-track{
     display:flex;
     height:100%;
-    transition:transform .5s cubic-bezier(.65,0,.35,1);
+    transition:transform .45s cubic-bezier(.65,0,.35,1);
   }
-  .slide{
+  .screen{
     flex:0 0 100%;
     width:100%;
     height:100%;
     overflow-y:auto;
-    padding:20px 24px 28px;
+    padding:clamp(12px,2.2vh,22px) clamp(14px,2.6vw,26px);
   }
   .slide-grid{
     display:grid;
-    grid-template-columns:1fr 260px;
-    gap:22px;
+    grid-template-columns:1fr 240px;
+    gap:20px;
     align-items:start;
   }
   @media(max-width:720px){ .slide-grid{grid-template-columns:1fr;} }
+  @media(max-height:560px){ .slide-grid{grid-template-columns:1fr 190px;} }
 
   .nav-arrow{
     position:absolute; top:50%; transform:translateY(-50%);
-    width:38px; height:38px; border-radius:50%;
+    width:36px; height:36px; border-radius:50%;
     border:1px solid var(--line);
     background:rgba(255,255,255,.92);
     color:var(--ink);
-    font-size:17px; line-height:1;
+    font-size:16px; line-height:1;
     cursor:pointer;
     display:flex; align-items:center; justify-content:center;
     box-shadow:0 6px 16px rgba(43,33,24,.14);
     z-index:5;
     transition:opacity .15s ease, transform .15s ease;
   }
-  .nav-arrow:hover{transform:translateY(-50%) scale(1.06);}
+  .nav-arrow:hover:not(:disabled){transform:translateY(-50%) scale(1.06);}
   .nav-arrow:disabled{opacity:0; pointer-events:none;}
-  .nav-arrow.prev{left:10px;}
-  .nav-arrow.next{right:10px;}
+  .nav-arrow.prev{left:8px;}
+  .nav-arrow.next{right:8px;}
 
   /* STAGE CONTENT */
-  .stage h2{font-family:'Playfair Display',serif;font-size:19px;margin:0 0 6px;}
-  .scenario{color:var(--ink-soft);font-size:13.5px;line-height:1.6;margin-bottom:14px;}
-  .board{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .stage h2{font-family:'Playfair Display',serif;font-size:18px;margin:0 0 6px;}
+  .scenario{color:var(--ink-soft);font-size:13px;line-height:1.6;margin-bottom:12px;}
+  .board{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
   @media(max-width:560px){.board{grid-template-columns:1fr;}}
   .col-title{
-    font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.09em;
-    text-transform:uppercase;color:var(--ink-soft);font-weight:600;margin-bottom:7px;
+    font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.09em;
+    text-transform:uppercase;color:var(--ink-soft);font-weight:600;margin-bottom:6px;
   }
   .pool, .dropzone{
     background:var(--panel-2);
     border:2px dashed var(--line);
-    border-radius:16px;
-    padding:10px;
-    min-height:150px;
-    display:flex; flex-direction:column; gap:7px;
+    border-radius:15px;
+    padding:9px;
+    min-height:130px;
+    display:flex; flex-direction:column; gap:6px;
   }
   .dropzone.dragover{border-color:var(--gold);background:#F3E9D2;}
   .card{
     background:#fff;
     border:1px solid var(--line);
     border-radius:12px;
-    padding:9px 11px;
-    font-size:13px;
+    padding:8px 10px;
+    font-size:12.5px;
     font-weight:500;
     cursor:grab;
     user-select:none; touch-action:none;
@@ -207,76 +214,96 @@
   .card.dragging{opacity:.35;}
   .card.placed-good{border-color:var(--sage);background:#EAF1E6;}
   .card.placed-bad{border-color:var(--clay);background:#F8E9E4;}
-  .card .emo{font-size:15px;}
+  .card.readonly{cursor:default;}
+  .card .emo{font-size:14px;}
   .drag-ghost{
     position:fixed; pointer-events:none; z-index:999;
     background:#fff; border:1px solid var(--gold); border-radius:14px;
-    padding:10px 12px; font-size:13.5px; font-weight:500;
+    padding:9px 11px; font-size:13px; font-weight:500;
     box-shadow:0 8px 20px rgba(43,33,24,.2);
     display:flex; align-items:center; gap:8px;
   }
-  .hint{font-size:11.5px;color:var(--ink-soft);margin-top:4px;}
-  .toast{font-size:11px;font-weight:600;padding:4px 8px;border-radius:8px;margin-top:2px;display:inline-block;}
+  .hint{font-size:11px;color:var(--ink-soft);margin-top:4px;}
+  .toast{font-size:10.5px;font-weight:600;padding:4px 8px;border-radius:8px;margin-top:2px;display:inline-block;}
   .toast.good{background:#EAF1E6;color:#3E5940;}
   .toast.bad{background:#F8E9E4;color:var(--clay);}
 
-  .actions{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
-  button.primary{
-    font-family:'Poppins',sans-serif; font-weight:600; font-size:13px; letter-spacing:.02em;
-    background:var(--brown); color:#FBF6EA; border:none; border-radius:99px;
-    padding:11px 22px; cursor:pointer; text-transform:uppercase;
-    box-shadow:0 8px 18px rgba(59,46,34,.32);
-    transition:background .15s ease, transform .1s ease;
-  }
-  button.primary:hover{background:var(--ink);}
-  button.primary:active{transform:translateY(1px);}
-  button.primary:disabled{background:#DCD3BF;box-shadow:none;cursor:not-allowed;}
+  .actions{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+  button{font-family:'Poppins',sans-serif;}
   button.ghost{
-    font-family:'Poppins',sans-serif; font-weight:600; font-size:12px;
+    font-weight:600; font-size:11.5px;
     background:transparent; color:var(--ink-soft); border:1px solid var(--line);
-    border-radius:99px; padding:10px 16px; cursor:pointer;
+    border-radius:99px; padding:9px 15px; cursor:pointer;
   }
+  button.ghost:hover{border-color:var(--gold);color:var(--ink);}
   .locked-note{
     display:flex; align-items:center; justify-content:center; height:100%;
-    color:var(--ink-soft); font-size:14px; text-align:center; padding:40px;
+    color:var(--ink-soft); font-size:14px; text-align:center; padding:30px;
   }
 
-  /* FEEDBACK */
-  .feedback{margin-top:16px;border-top:1px solid var(--line);padding-top:14px;display:none;}
-  .feedback.show{display:block;animation:fadein .4s ease;}
-  @keyframes fadein{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
-  .fb-block{border-radius:14px;padding:12px 14px;margin-bottom:9px;}
+  /* FEEDBACK SCREEN */
+  .feedback-screen{display:flex; align-items:flex-start; justify-content:center; min-height:100%;}
+  .feedback-wrap{max-width:760px; width:100%; margin:0 auto;}
+  .fb-header{text-align:center; margin-bottom:14px;}
+  .fb-header .eyebrow{display:block;margin-bottom:4px;}
+  .fb-header h2{font-family:'Playfair Display',serif;font-size:20px;}
+  .fb-grid{display:grid; grid-template-columns:1fr 200px; gap:18px; align-items:start;}
+  @media(max-width:640px){.fb-grid{grid-template-columns:1fr;}}
+  .fb-block{border-radius:14px;padding:12px 14px;margin-bottom:10px;}
   .fb-outcome{background:#EAF1E6;border:1px solid var(--sage);}
   .fb-theory{background:var(--panel-2);border:1px solid var(--line);}
   .fb-title{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;margin-bottom:5px;color:var(--ink-soft);}
-  .fb-body{font-size:13.5px;line-height:1.6;}
-  .fb-ref{font-size:11.5px;color:var(--ink-soft);margin-top:7px;font-style:italic;}
+  .fb-body{font-size:13px;line-height:1.6;}
+  .fb-ref{font-size:11px;color:var(--ink-soft);margin-top:7px;font-style:italic;}
+  .fb-tally{margin-top:8px;font-weight:600;font-size:13px;}
 
-  .end-slide{display:flex;align-items:center;justify-content:center;height:100%;}
-  .end-screen{text-align:center;padding:20px 16px;max-width:520px;}
-  .end-screen h2{font-family:'Playfair Display',serif;font-size:24px;margin-bottom:10px;}
-  .end-screen p{color:var(--ink-soft);margin:0 auto 16px;line-height:1.6;font-size:14px;}
+  /* INTRO SCREEN */
+  .intro-screen{display:flex; align-items:center; justify-content:center; min-height:100%;}
+  .intro-inner{max-width:760px; width:100%; text-align:center;}
+  .intro-eyebrow{
+    font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.16em;
+    text-transform:uppercase; color:var(--gold-dark); font-weight:600; margin-bottom:8px;
+  }
+  .intro-title{font-family:'Playfair Display',serif; font-size:clamp(20px,3.4vw,30px); font-weight:800; margin-bottom:14px;}
+  .intro-katie-wrap{width:110px;margin:0 auto 12px;}
+  .intro-katie-wrap svg{width:100%;display:block;}
+  .intro-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; text-align:left; margin-top:6px;}
+  @media(max-width:680px){.intro-grid{grid-template-columns:1fr;}}
+  .intro-card{
+    background:var(--panel-2); border:1px solid var(--line); border-radius:16px;
+    padding:14px 14px;
+  }
+  .intro-card-label{
+    font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:.09em;
+    text-transform:uppercase; color:var(--gold-dark); font-weight:700; margin-bottom:6px;
+  }
+  .intro-card-body{font-size:12.5px; line-height:1.55; color:var(--ink);}
 
-  /* KATIE PANEL */
+  .end-screen-wrap{display:flex;align-items:center;justify-content:center;min-height:100%;}
+  .end-screen{text-align:center;padding:16px;max-width:520px;}
+  .end-screen h2{font-family:'Playfair Display',serif;font-size:22px;margin-bottom:10px;}
+  .end-screen p{color:var(--ink-soft);margin:0 auto 14px;line-height:1.6;font-size:13.5px;}
+
+  /* KATIE PANEL (in interaction screen) */
   .katie-panel{
     background:linear-gradient(160deg, var(--brown), var(--gold) 60%, var(--rust));
     border-radius:20px;
-    padding:16px 14px;
+    padding:14px 12px;
     display:flex; flex-direction:column; align-items:center;
     color:#fff;
   }
   .katie-day{
     font-family:'JetBrains Mono',monospace;
-    font-size:10.5px; letter-spacing:.1em; text-transform:uppercase;
+    font-size:10px; letter-spacing:.1em; text-transform:uppercase;
     background:rgba(255,255,255,.18);
-    padding:4px 11px; border-radius:99px; margin-bottom:10px;
+    padding:4px 10px; border-radius:99px; margin-bottom:9px;
   }
-  .katie-svg-wrap{width:100%;max-width:170px;margin-bottom:10px;}
+  .katie-svg-wrap{width:100%;max-width:150px;margin-bottom:9px;}
   .katie-svg-wrap svg{width:100%;height:auto;display:block;}
   .speech{
     background:#fff; color:var(--ink);
-    border-radius:14px; padding:10px 12px;
-    font-size:12.5px; font-weight:500; line-height:1.45;
+    border-radius:14px; padding:9px 11px;
+    font-size:12px; font-weight:500; line-height:1.4;
     position:relative; text-align:center;
     box-shadow:0 6px 16px rgba(0,0,0,.15);
   }
@@ -284,11 +311,63 @@
     content:""; position:absolute; top:-8px; left:50%; transform:translateX(-50%);
     border-left:8px solid transparent; border-right:8px solid transparent; border-bottom:8px solid #fff;
   }
-  .katie-name{font-family:'Playfair Display',serif;font-weight:700;font-size:14px;margin-top:12px;}
+  .katie-name{font-family:'Playfair Display',serif;font-weight:700;font-size:13px;margin-top:10px;}
+  @media(max-height:560px){
+    .katie-svg-wrap{max-width:100px;}
+    .katie-day, .katie-name{display:none;}
+    .katie-panel{padding:10px 8px;}
+  }
+
+  /* PERSISTENT BOTTOM NAV */
+  .bottom-nav{
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:10px clamp(14px,2.5vw,24px);
+    padding-bottom:max(10px, env(safe-area-inset-bottom));
+    border-top:1px solid var(--line);
+    background:var(--panel);
+    min-height:var(--nav-h);
+  }
+  .nav-btn{
+    font-weight:600; font-size:12.5px; letter-spacing:.01em;
+    border-radius:99px; padding:10px 16px; cursor:pointer; border:none;
+    display:flex; align-items:center; gap:6px; white-space:nowrap;
+  }
+  .nav-btn.icon-only{padding:10px 12px;}
+  .nav-btn.ghost{background:var(--panel-2); color:var(--ink-soft); border:1px solid var(--line);}
+  .nav-btn.ghost:disabled{opacity:.4; cursor:not-allowed;}
+  .nav-btn.ghost:hover:not(:disabled){color:var(--ink); border-color:var(--gold);}
+  .nav-btn.primary{
+    background:var(--brown); color:#FBF6EA;
+    text-transform:uppercase; font-size:12px;
+    box-shadow:0 8px 18px rgba(59,46,34,.28);
+    transition:background .15s ease, transform .1s ease;
+    margin-left:auto;
+  }
+  .nav-btn.primary:hover:not(:disabled){background:var(--ink);}
+  .nav-btn.primary:active:not(:disabled){transform:translateY(1px);}
+  .nav-btn.primary:disabled{background:#DCD3BF;box-shadow:none;cursor:not-allowed;color:#8f8574;}
+  .nav-progress{
+    font-family:'JetBrains Mono',monospace; font-size:10.5px; color:var(--ink-soft);
+    white-space:nowrap; display:none;
+  }
+  @media(min-width:560px){ .nav-progress{display:inline-flex;} }
+
+  @media(max-height:420px){
+    :root{--nav-h:52px;}
+    .nav-btn{padding:7px 12px;font-size:11px;}
+    .top-bar{display:none;}
+  }
+
+  a:focus-visible, button:focus-visible, [tabindex]:focus-visible{
+    outline:2px solid var(--gold-dark); outline-offset:2px;
+  }
 </style>
 </head>
 <body>
-<div class="app-shell">
+<div class="app-shell" id="appShell">
   <div class="top-bar">
     <div class="brand">
       <div class="eyebrow">UDL Training Simulation</div>
@@ -302,12 +381,19 @@
     </div>
   </div>
 
-  <div class="tabs" id="tabs"></div>
+  <div class="tabs" id="tabs" role="tablist" aria-label="Training days"></div>
 
   <div class="slider-viewport">
-    <button class="nav-arrow prev" id="prevBtn" aria-label="Previous">‹</button>
+    <button class="nav-arrow prev" id="prevArrow" aria-label="Previous screen">‹</button>
     <div class="slider-track" id="track"></div>
-    <button class="nav-arrow next" id="nextBtn" aria-label="Next">›</button>
+    <button class="nav-arrow next" id="nextArrow" aria-label="Next screen">›</button>
+  </div>
+
+  <div class="bottom-nav" role="navigation" aria-label="Simulation navigation">
+    <button class="nav-btn ghost icon-only" id="navPrev" aria-label="Back">‹ Back</button>
+    <button class="nav-btn ghost icon-only" id="navNext" aria-label="Next">Next ›</button>
+    <div class="nav-progress" id="navProgress"></div>
+    <button class="nav-btn primary" id="navPrimary">Start</button>
   </div>
 </div>
 
@@ -320,6 +406,8 @@ const DAYS = [
   {
     id:1, name:"Cybersecurity", meterLabel:"Engagement Meter",
     title:"Day 1 — Mandatory Cybersecurity Training",
+    objective:"Learn how chunking, pacing, and learner control shape sustained engagement.",
+    focus:"Watch how the Engagement Meter reacts as you add or remove each strategy.",
     scenario:"Katie's course is a 45-minute lecture: one long video, no breaks, no interaction. She's already losing focus. Drag in strategies that will actually help — a few options here will do more harm than good.",
     poolTitle:"Available Strategies", zoneTitle:"Katie's Support Plan",
     items:[
@@ -342,6 +430,8 @@ const DAYS = [
   {
     id:2, name:"The Process", meterLabel:"Understanding Meter",
     title:"Day 2 — Understanding a Complicated Process",
+    objective:"Explore how multiple means of representation reduce cognitive overload.",
+    focus:"Notice how combining formats — visual, audio, hands-on — changes comprehension.",
     scenario:"Katie has to learn a complicated software process from a 20-page PDF: technical language, no visuals. She's overwhelmed. Build Katie's Learning Toolkit — a couple of these resources will just add to the overload.",
     poolTitle:"Available Resources", zoneTitle:"Katie's Learning Toolkit",
     items:[
@@ -363,6 +453,8 @@ const DAYS = [
   {
     id:3, name:"Showcase", meterLabel:"Confidence Meter",
     title:"Day 3 — Showcase Katie's Knowledge",
+    objective:"Practice designing authentic, flexible ways for learners to demonstrate mastery.",
+    focus:"Think about what actually proves someone can do the job, not just recall facts.",
     scenario:"Katie understands the material — now she has to prove it. Choose ways for her to demonstrate her learning. A couple of these methods work against everything you've built so far.",
     poolTitle:"Assessment Options", zoneTitle:"Katie's Assessment Plan",
     items:[
@@ -384,6 +476,8 @@ const DAYS = [
   {
     id:4, name:"Redesign", meterLabel:"Inclusion Meter",
     title:"Day 4 — Redesign Katie's Training Course",
+    objective:"Apply everything you've learned to redesign a full course using UDL.",
+    focus:"Watch for design choices that quietly recreate the barriers Katie ran into this week.",
     scenario:"One last course still needs a redesign. Drag in the features that align with UDL — and leave out anything that recreates the barriers Katie ran into this week.",
     poolTitle:"Design Features", zoneTitle:"Redesigned Course",
     items:[
@@ -405,6 +499,21 @@ const DAYS = [
     speech:{good:"This course actually works with how my brain works!", bad:"Without breaks or choice, I can already feel myself checking out."}
   }
 ];
+
+/* ---------- SCREEN MAP ---------- */
+/* Each day expands to [intro, interact, feedback]; a final end screen closes the flow. */
+const SCREENS = [];
+DAYS.forEach((d,i)=>{
+  SCREENS.push({type:'intro', dayIndex:i});
+  SCREENS.push({type:'interact', dayIndex:i});
+  SCREENS.push({type:'feedback', dayIndex:i});
+});
+SCREENS.push({type:'end'});
+const END_INDEX = SCREENS.length - 1;
+
+function introIdx(dayIndex){ return dayIndex*3; }
+function interactIdx(dayIndex){ return dayIndex*3+1; }
+function feedbackIdx(dayIndex){ return dayIndex*3+2; }
 
 /* ---------- KATIE SVG ---------- */
 function propMarkup(prop){
@@ -453,7 +562,7 @@ function faceMarkup(mood){
 }
 
 function katieSVG(day, mood){
-  return `<svg viewBox="0 0 200 210" xmlns="http://www.w3.org/2000/svg">
+  return `<svg viewBox="0 0 200 210" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustration of Katie">
     <ellipse cx="75" cy="196" rx="55" ry="10" fill="rgba(0,0,0,.12)"/>
     <path d="M40 205 Q40 150 75 150 Q110 150 110 205 Z" fill="${day.shirt}"/>
     <circle cx="75" cy="120" r="42" fill="#F2C29B"/>
@@ -464,16 +573,20 @@ function katieSVG(day, mood){
 }
 
 /* ---------- STATE ---------- */
-let state = {
-  currentDay: 0,
-  showEnd: false,
-  meter: 50,
-  unlocked: [true,false,false,false],
-  completed: [false,false,false,false],
-  badges: [],
-  dayPlacements: {},   // dayIndex -> {itemIndex: 'good'|'bad'}
-  dayContribution: {}  // dayIndex -> total meter delta contributed
-};
+function freshState(){
+  const unlocked = new Array(SCREENS.length).fill(false);
+  unlocked[0] = true;
+  return {
+    current: 0,
+    meter: 50,
+    unlocked,
+    completed: [false,false,false,false],
+    badges: [],
+    dayPlacements: {},
+    dayContribution: {}
+  };
+}
+let state = freshState();
 
 const tabsEl = document.getElementById('tabs');
 const trackEl = document.getElementById('track');
@@ -481,57 +594,84 @@ const gaugeFill = document.getElementById('gaugeFill');
 const gaugeNum = document.getElementById('gaugeNum');
 const meterLabel = document.getElementById('meterLabel');
 const badgesEl = document.getElementById('badges');
-const prevBtn = document.getElementById('prevBtn');
-const nextBtn = document.getElementById('nextBtn');
+const prevArrow = document.getElementById('prevArrow');
+const nextArrow = document.getElementById('nextArrow');
+const navPrev = document.getElementById('navPrev');
+const navNext = document.getElementById('navNext');
+const navPrimary = document.getElementById('navPrimary');
+const navProgress = document.getElementById('navProgress');
 
 let dragged = null;
 let ghost = null;
 
 /* ---------- NAVIGATION ---------- */
-function currentSlideIndex(){ return state.showEnd ? DAYS.length : state.currentDay; }
-
-function goToDay(i){
-  if(i<0 || i>=DAYS.length || !state.unlocked[i]) return;
-  state.currentDay = i;
-  state.showEnd = false;
+function goTo(idx){
+  if(idx < 0 || idx >= SCREENS.length) return;
+  if(!state.unlocked[idx]) return;
+  state.current = idx;
   renderAll();
 }
-function goToEnd(){ state.showEnd = true; renderAll(); }
 
-function updateTrackPosition(){
-  trackEl.style.transform = `translateX(-${currentSlideIndex() * 100}%)`;
+function startDay(dayIndex){
+  const idx = interactIdx(dayIndex);
+  state.unlocked[idx] = true;
+  goTo(idx);
 }
 
-prevBtn.onclick = ()=>{
-  if(state.showEnd){ goToDay(DAYS.length-1); return; }
-  if(state.currentDay>0) goToDay(state.currentDay-1);
-};
-nextBtn.onclick = ()=>{
-  if(state.showEnd) return;
-  const isLast = state.currentDay === DAYS.length-1;
-  if(isLast){
-    if(state.completed[state.currentDay]) goToEnd();
-  } else if(state.unlocked[state.currentDay+1]){
-    goToDay(state.currentDay+1);
+function submitDay(dayIndex){
+  state.completed[dayIndex] = true;
+  const d = DAYS[dayIndex];
+  if(!state.badges.includes(d.badge)) state.badges.push(d.badge);
+  const idx = feedbackIdx(dayIndex);
+  state.unlocked[idx] = true;
+  goTo(idx);
+}
+
+function continueFromFeedback(dayIndex){
+  if(dayIndex === DAYS.length - 1){
+    state.unlocked[END_INDEX] = true;
+    goTo(END_INDEX);
+  } else {
+    const idx = introIdx(dayIndex+1);
+    state.unlocked[idx] = true;
+    goTo(idx);
   }
-};
+}
+
+function lastUnlockedInDay(dayIndex){
+  const candidates = [feedbackIdx(dayIndex), interactIdx(dayIndex), introIdx(dayIndex)];
+  for(const c of candidates){ if(state.unlocked[c]) return c; }
+  return introIdx(dayIndex);
+}
+
+prevArrow.onclick = ()=> goTo(state.current - 1);
+nextArrow.onclick = ()=>{ if(state.unlocked[state.current+1]) goTo(state.current+1); };
+navPrev.onclick = ()=> goTo(state.current - 1);
+navNext.onclick = ()=>{ if(state.unlocked[state.current+1]) goTo(state.current+1); };
 
 /* ---------- RENDER: TABS ---------- */
 function renderTabs(){
   tabsEl.innerHTML = '';
+  const screen = SCREENS[state.current];
+  const activeDay = screen.type === 'end' ? -1 : screen.dayIndex;
   DAYS.forEach((d,i)=>{
     const btn = document.createElement('button');
-    btn.className = 'tab' + (!state.showEnd && i===state.currentDay?' active':'') + (state.completed[i]?' done':'');
-    btn.disabled = !state.unlocked[i];
+    const unlocked = state.unlocked[introIdx(i)];
+    btn.className = 'tab' + (activeDay===i?' active':'') + (state.completed[i]?' done':'');
+    btn.disabled = !unlocked;
+    btn.setAttribute('role','tab');
+    btn.setAttribute('aria-selected', activeDay===i ? 'true' : 'false');
     btn.innerHTML = `<div class="tnum">Day ${d.id}</div><div class="tname">${d.name}</div>`;
-    btn.onclick = ()=> goToDay(i);
+    btn.onclick = ()=> goTo(lastUnlockedInDay(i));
     tabsEl.appendChild(btn);
   });
 }
 
 /* ---------- RENDER: HUD ---------- */
 function renderHUD(){
-  const d = DAYS[state.showEnd ? DAYS.length-1 : state.currentDay];
+  const screen = SCREENS[state.current];
+  const dayIndex = screen.type === 'end' ? DAYS.length-1 : screen.dayIndex;
+  const d = DAYS[dayIndex];
   meterLabel.textContent = d.meterLabel;
   const pct = Math.max(0, Math.min(100, state.meter));
   gaugeFill.style.width = pct + '%';
@@ -542,24 +682,72 @@ function renderHUD(){
   badgesEl.innerHTML = state.badges.map(b=>`<span class="badge">${b}</span>`).join('');
 }
 
+/* ---------- RENDER: BOTTOM NAV ---------- */
+function renderBottomNav(){
+  const screen = SCREENS[state.current];
+  navPrev.disabled = state.current === 0;
+  navNext.disabled = !state.unlocked[state.current+1];
+  prevArrow.disabled = state.current === 0;
+  nextArrow.disabled = !state.unlocked[state.current+1];
+
+  navPrimary.disabled = false;
+  navPrimary.onclick = null;
+
+  if(screen.type === 'intro'){
+    const d = DAYS[screen.dayIndex];
+    navProgress.textContent = `Day ${d.id} of ${DAYS.length} · Introduction`;
+    navPrimary.textContent = `Start Day ${d.id} ›`;
+    navPrimary.onclick = ()=> startDay(screen.dayIndex);
+  } else if(screen.type === 'interact'){
+    const d = DAYS[screen.dayIndex];
+    const completed = state.completed[screen.dayIndex];
+    const placedCount = Object.keys(state.dayPlacements[screen.dayIndex] || {}).length;
+    navProgress.textContent = `Day ${d.id} of ${DAYS.length} · Interaction`;
+    if(completed){
+      navPrimary.textContent = 'View Results ›';
+      navPrimary.onclick = ()=> goTo(feedbackIdx(screen.dayIndex));
+    } else {
+      navPrimary.textContent = 'Submit & See Results';
+      navPrimary.disabled = placedCount === 0;
+      navPrimary.onclick = ()=> submitDay(screen.dayIndex);
+    }
+  } else if(screen.type === 'feedback'){
+    const d = DAYS[screen.dayIndex];
+    const isLast = screen.dayIndex === DAYS.length - 1;
+    navProgress.textContent = `Day ${d.id} of ${DAYS.length} · Reflection`;
+    navPrimary.textContent = isLast ? 'Finish Training ›' : `Continue to Day ${d.id+1} ›`;
+    navPrimary.onclick = ()=> continueFromFeedback(screen.dayIndex);
+  } else {
+    navProgress.textContent = 'Training complete';
+    navPrimary.textContent = 'Play Again';
+    navPrimary.onclick = ()=> restart();
+    nextArrow.disabled = true;
+    navNext.disabled = true;
+  }
+}
+
+function restart(){
+  state = freshState();
+  renderAll();
+}
+
 /* ---------- RENDER: SLIDES ---------- */
 function buildSlideShells(){
   trackEl.innerHTML = '';
-  DAYS.forEach((d,i)=>{
-    const slide = document.createElement('div');
-    slide.className = 'slide';
-    slide.id = 'slide-' + i;
-    trackEl.appendChild(slide);
+  SCREENS.forEach((s,i)=>{
+    const el = document.createElement('div');
+    el.className = 'screen';
+    el.id = 'screen-' + i;
+    trackEl.appendChild(el);
   });
-  const endSlide = document.createElement('div');
-  endSlide.className = 'slide end-slide';
-  endSlide.id = 'slide-end';
-  trackEl.appendChild(endSlide);
 }
 
-function katieMarkup(dayIdx){
-  const d = DAYS[dayIdx];
+function katieMarkup(dayIndex, size){
+  const d = DAYS[dayIndex];
   const mood = state.meter >= 50 ? 'good' : 'bad';
+  if(size === 'small'){
+    return `<div class="intro-katie-wrap">${katieSVG(d, mood)}</div>`;
+  }
   return `
     <div class="katie-panel">
       <div class="katie-day">Day ${d.id}</div>
@@ -569,22 +757,41 @@ function katieMarkup(dayIdx){
     </div>`;
 }
 
-function renderDaySlide(i){
-  const slide = document.getElementById('slide-' + i);
-  if(!slide) return;
-  const d = DAYS[i];
+function renderIntroScreen(i, dayIndex){
+  const el = document.getElementById('screen-' + i);
+  const d = DAYS[dayIndex];
+  el.innerHTML = `
+    <div class="intro-screen">
+      <div class="intro-inner">
+        <div class="intro-eyebrow">Day ${d.id} of ${DAYS.length}</div>
+        <h2 class="intro-title">${d.title}</h2>
+        ${katieMarkup(dayIndex,'small')}
+        <div class="intro-grid">
+          <div class="intro-card">
+            <div class="intro-card-label">Learning Objective</div>
+            <div class="intro-card-body">${d.objective}</div>
+          </div>
+          <div class="intro-card">
+            <div class="intro-card-label">The Scenario</div>
+            <div class="intro-card-body">${d.scenario}</div>
+          </div>
+          <div class="intro-card">
+            <div class="intro-card-label">Pay Attention To</div>
+            <div class="intro-card-body">${d.focus}</div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
 
-  if(!state.unlocked[i]){
-    slide.innerHTML = `<div class="locked-note">Complete Day ${i} to unlock this page.</div>`;
-    return;
-  }
-
-  const placements = state.dayPlacements[i] || {};
+function renderInteractScreen(i, dayIndex){
+  const el = document.getElementById('screen-' + i);
+  const d = DAYS[dayIndex];
+  const placements = state.dayPlacements[dayIndex] || {};
   const placedCount = Object.keys(placements).length;
-  const isCompleted = state.completed[i];
-  const isLast = i === DAYS.length - 1;
+  const isCompleted = state.completed[dayIndex];
 
-  slide.innerHTML = `
+  el.innerHTML = `
     <div class="slide-grid">
       <div class="stage">
         <h2>${d.title}</h2>
@@ -592,34 +799,32 @@ function renderDaySlide(i){
         <div class="board">
           <div>
             <div class="col-title">${d.poolTitle}</div>
-            <div class="pool" id="pool-${i}"></div>
+            <div class="pool" id="pool-${dayIndex}"></div>
           </div>
           <div>
             <div class="col-title">${d.zoneTitle}</div>
-            <div class="dropzone" id="dropzone-${i}"></div>
+            <div class="dropzone" id="dropzone-${dayIndex}"></div>
           </div>
         </div>
-        <p class="hint">Drag cards into ${d.zoneTitle}, then submit whenever you feel you've done enough for Katie.</p>
-        <div class="actions" id="actions-${i}">
-          ${isCompleted ? '' : `<button class="primary" id="completeBtn-${i}" ${placedCount>0?'':'disabled'}>Submit &amp; See Results</button>
-          <button class="ghost" id="resetBtn-${i}">Reset Day</button>`}
+        <p class="hint">${isCompleted ? 'This day is complete — use View Results below, or Reset to try different choices.' : `Drag cards into ${d.zoneTitle}, then use Submit below when you're ready.`}</p>
+        <div class="actions">
+          ${isCompleted ? '<button class="ghost" id="resetBtn">Reset &amp; Try Again</button>' : (placedCount>0 ? '<button class="ghost" id="resetBtn">Reset Day</button>' : '')}
         </div>
-        <div class="feedback${isCompleted?' show':''}" id="feedback-${i}">${isCompleted ? feedbackMarkup(d, i, isLast) : ''}</div>
       </div>
-      ${katieMarkup(i)}
+      ${katieMarkup(dayIndex)}
     </div>
   `;
 
-  const pool = document.getElementById('pool-' + i);
-  const dropzone = document.getElementById('dropzone-' + i);
+  const pool = document.getElementById('pool-' + dayIndex);
+  const dropzone = document.getElementById('dropzone-' + dayIndex);
 
   d.items.forEach((item,idx)=>{
     if(placements[idx]) return;
-    pool.appendChild(makeCard(item, idx, i));
+    pool.appendChild(makeCard(item, idx, dayIndex, isCompleted));
   });
   d.items.forEach((item,idx)=>{
     if(!placements[idx]) return;
-    const c = makeCard(item, idx, i, true);
+    const c = makeCard(item, idx, dayIndex, true);
     c.classList.add(placements[idx]==='good' ? 'placed-good' : 'placed-bad');
     const toast = document.createElement('div');
     toast.className = 'toast ' + (placements[idx]==='good'?'good':'bad');
@@ -635,65 +840,76 @@ function renderDaySlide(i){
     dropzone.innerHTML = '<div class="hint">Nothing placed yet.</div>';
   }
 
-  if(!isCompleted){
-    const completeBtn = document.getElementById('completeBtn-' + i);
-    const resetBtn = document.getElementById('resetBtn-' + i);
-    if(completeBtn) completeBtn.onclick = ()=> completeDay(i);
-    if(resetBtn) resetBtn.onclick = ()=>{
-      state.meter -= (state.dayContribution[i] || 0);
-      state.dayContribution[i] = 0;
-      state.dayPlacements[i] = {};
-      renderAll();
-    };
-  } else {
-    attachFeedbackHandlers(i, isLast);
-  }
+  const resetBtn = document.getElementById('resetBtn');
+  if(resetBtn) resetBtn.onclick = ()=>{
+    state.meter -= (state.dayContribution[dayIndex] || 0);
+    state.dayContribution[dayIndex] = 0;
+    state.dayPlacements[dayIndex] = {};
+    state.completed[dayIndex] = false;
+    renderAll();
+  };
 }
 
-function feedbackMarkup(d, i, isLast){
-  const placements = state.dayPlacements[i] || {};
+function renderFeedbackScreen(i, dayIndex){
+  const el = document.getElementById('screen-' + i);
+  const d = DAYS[dayIndex];
+  const placements = state.dayPlacements[dayIndex] || {};
   const goodCount = Object.values(placements).filter(v=>v==='good').length;
   const badCount = Object.values(placements).filter(v=>v==='bad').length;
-  return `
-    <div class="fb-block fb-outcome">
-      <div class="fb-title">Learning Outcome</div>
-      <div class="fb-body">${d.outcome}</div>
-      <div class="fb-body" style="margin-top:8px;font-weight:600;">You chose ${goodCount} helpful strateg${goodCount===1?'y':'ies'}${badCount>0 ? ' and '+badCount+' that worked against Katie' : ''}.</div>
-    </div>
-    <div class="fb-block fb-theory">
-      <div class="fb-title">Connection to Theory</div>
-      <div class="fb-body">${d.theory}</div>
-      <div class="fb-ref">${d.ref}</div>
-    </div>
-    <div class="actions">
-      ${isLast ? '<button class="primary" id="finishBtn">Finish Training</button>' : `<button class="primary" id="nextBtn-${i}">Continue to Day ${i+2}</button>`}
+
+  el.innerHTML = `
+    <div class="feedback-screen">
+      <div class="feedback-wrap">
+        <div class="fb-header">
+          <span class="eyebrow">Day ${d.id} · Reflection</span>
+          <h2>${d.title.split('—')[1] ? d.title.split('—')[1].trim() : d.title}</h2>
+        </div>
+        <div class="fb-grid">
+          <div>
+            <div class="fb-block fb-outcome">
+              <div class="fb-title">Learning Outcome</div>
+              <div class="fb-body">${d.outcome}</div>
+              <div class="fb-tally">You chose ${goodCount} helpful strateg${goodCount===1?'y':'ies'}${badCount>0 ? ' and '+badCount+' that worked against Katie' : ''}.</div>
+            </div>
+            <div class="fb-block fb-theory">
+              <div class="fb-title">Connection to Theory</div>
+              <div class="fb-body">${d.theory}</div>
+              <div class="fb-ref">${d.ref}</div>
+            </div>
+          </div>
+          ${katieMarkup(dayIndex)}
+        </div>
+      </div>
     </div>
   `;
 }
 
-function attachFeedbackHandlers(i, isLast){
-  if(isLast){
-    const finishBtn = document.getElementById('finishBtn');
-    if(finishBtn) finishBtn.onclick = goToEnd;
-  } else {
-    const nextDayBtn = document.getElementById('nextBtn-' + i);
-    if(nextDayBtn) nextDayBtn.onclick = ()=> goToDay(i+1);
-  }
+function renderEndScreen(i){
+  const el = document.getElementById('screen-' + i);
+  el.innerHTML = `
+    <div class="end-screen-wrap">
+      <div class="end-screen">
+        <h2>🎓 Katie completed her training</h2>
+        <p>Across four days, you applied Behaviourism, Cognitivism, Constructivism, and Social Learning Theory through Universal Design for Learning — turning a week that could have shut Katie out into one that let her succeed.</p>
+        <div class="badges" style="justify-content:center;">${state.badges.map(b=>`<span class="badge">${b}</span>`).join('')}</div>
+      </div>
+    </div>
+  `;
 }
 
-function makeCard(item, idx, dayIdx, placed){
+function makeCard(item, idx, dayIndex, disabled){
   const c = document.createElement('div');
-  c.className = 'card';
+  c.className = 'card' + (disabled ? ' readonly' : '');
   c.innerHTML = `<span class="emo">${item.emo}</span><span>${item.label}</span>`;
-  if(!placed){
-    c.addEventListener('pointerdown', (e)=>startDrag(e, item, idx, c, dayIdx));
+  if(!disabled){
+    c.addEventListener('pointerdown', (e)=>startDrag(e, item, idx, c, dayIndex));
   }
   return c;
 }
 
-function startDrag(e, item, idx, cardEl, dayIdx){
+function startDrag(e, item, idx, cardEl, dayIndex){
   e.preventDefault();
-  dragged = {item, idx, dayIdx};
+  dragged = {item, idx, dayIndex};
   cardEl.classList.add('dragging');
 
   ghost = document.createElement('div');
@@ -702,17 +918,17 @@ function startDrag(e, item, idx, cardEl, dayIdx){
   document.body.appendChild(ghost);
   moveGhost(e);
 
-  function onMove(ev){ moveGhost(ev); highlightDropzone(ev, dayIdx); }
+  function onMove(ev){ moveGhost(ev); highlightDropzone(ev, dayIndex); }
   function onUp(ev){
     document.removeEventListener('pointermove', onMove);
     document.removeEventListener('pointerup', onUp);
-    const dz = document.getElementById('dropzone-' + dayIdx);
+    const dz = document.getElementById('dropzone-' + dayIndex);
     const rect = dz.getBoundingClientRect();
     const inside = ev.clientX>=rect.left && ev.clientX<=rect.right && ev.clientY>=rect.top && ev.clientY<=rect.bottom;
     dz.classList.remove('dragover');
     ghost.remove();
     cardEl.classList.remove('dragging');
-    if(inside){ placeItem(dayIdx, idx, item); }
+    if(inside){ placeItem(dayIndex, idx, item); }
     dragged = null;
   }
   document.addEventListener('pointermove', onMove);
@@ -724,70 +940,64 @@ function moveGhost(e){
   ghost.style.left = (e.clientX+12) + 'px';
   ghost.style.top = (e.clientY+12) + 'px';
 }
-function highlightDropzone(e, dayIdx){
-  const dz = document.getElementById('dropzone-' + dayIdx);
+function highlightDropzone(e, dayIndex){
+  const dz = document.getElementById('dropzone-' + dayIndex);
   const rect = dz.getBoundingClientRect();
   const inside = e.clientX>=rect.left && e.clientX<=rect.right && e.clientY>=rect.top && e.clientY<=rect.bottom;
   dz.classList.toggle('dragover', inside);
 }
 
-function placeItem(dayIdx, idx, item){
-  if(!state.dayPlacements[dayIdx]) state.dayPlacements[dayIdx] = {};
-  state.dayPlacements[dayIdx][idx] = item.good ? 'good' : 'bad';
+function placeItem(dayIndex, idx, item){
+  if(!state.dayPlacements[dayIndex]) state.dayPlacements[dayIndex] = {};
+  state.dayPlacements[dayIndex][idx] = item.good ? 'good' : 'bad';
   const delta = item.good ? GOOD_DELTA : BAD_DELTA;
   state.meter = Math.max(0, Math.min(100, state.meter + delta));
-  state.dayContribution[dayIdx] = (state.dayContribution[dayIdx] || 0) + delta;
+  state.dayContribution[dayIndex] = (state.dayContribution[dayIndex] || 0) + delta;
   renderAll();
 }
 
-function completeDay(i){
-  state.completed[i] = true;
-  if(i+1 < DAYS.length) state.unlocked[i+1] = true;
-  const d = DAYS[i];
-  if(!state.badges.includes(d.badge)) state.badges.push(d.badge);
-  renderAll();
-}
-
-function renderEndSlide(){
-  const slide = document.getElementById('slide-end');
-  slide.innerHTML = `
-    <div class="end-screen">
-      <h2>🎓 Katie completed her training</h2>
-      <p>Across four days, you applied Behaviourism, Cognitivism, Constructivism, and Social Learning Theory through Universal Design for Learning — turning a week that could have shut Katie out into one that let her succeed.</p>
-      <div class="badges" style="justify-content:center;">${state.badges.map(b=>`<span class="badge">${b}</span>`).join('')}</div>
-      <div class="actions" style="justify-content:center;margin-top:20px;">
-        <button class="primary" id="replayBtn">Play Again</button>
-      </div>
-    </div>
-  `;
-  document.getElementById('replayBtn').onclick = ()=>{
-    state = {currentDay:0, showEnd:false, meter:50, unlocked:[true,false,false,false], completed:[false,false,false,false], badges:[], dayPlacements:{}, dayContribution:{}};
-    renderAll();
-  };
-}
-
-/* ---------- NAV ARROW STATE ---------- */
-function updateNavArrows(){
-  if(state.showEnd){
-    prevBtn.disabled = false;
-    nextBtn.disabled = true;
-    return;
-  }
-  prevBtn.disabled = state.currentDay === 0;
-  const isLast = state.currentDay === DAYS.length-1;
-  nextBtn.disabled = isLast ? !state.completed[state.currentDay] : !state.unlocked[state.currentDay+1];
+/* ---------- NAV ARROW / TRACK POSITION ---------- */
+function updateTrackPosition(){
+  trackEl.style.transform = `translateX(-${state.current * 100}%)`;
 }
 
 /* ---------- MASTER RENDER ---------- */
 function renderAll(){
   renderTabs();
   renderHUD();
-  DAYS.forEach((d,i)=> renderDaySlide(i));
-  renderEndSlide();
+  SCREENS.forEach((s,i)=>{
+    if(s.type === 'intro') renderIntroScreen(i, s.dayIndex);
+    else if(s.type === 'interact') renderInteractScreen(i, s.dayIndex);
+    else if(s.type === 'feedback') renderFeedbackScreen(i, s.dayIndex);
+    else renderEndScreen(i);
+  });
+  renderBottomNav();
   updateTrackPosition();
-  updateNavArrows();
+  notifyParentHeight();
 }
 
+/* ---------- RESPONSIVE / EMBED HEIGHT HANDLING ---------- */
+function setAppHeight(){
+  const h = (window.visualViewport && window.visualViewport.height) || window.innerHeight;
+  document.documentElement.style.setProperty('--app-height', h + 'px');
+}
+function notifyParentHeight(){
+  try{
+    if(window.parent && window.parent !== window){
+      const h = document.getElementById('appShell').scrollHeight;
+      window.parent.postMessage({ type:'katie-sim-resize', height: h }, '*');
+    }
+  }catch(err){ /* cross-origin parent — ignore */ }
+}
+
+window.addEventListener('resize', ()=>{ setAppHeight(); });
+window.addEventListener('orientationchange', ()=>{ setAppHeight(); });
+if(window.visualViewport){
+  window.visualViewport.addEventListener('resize', setAppHeight);
+}
+new ResizeObserver(()=> notifyParentHeight()).observe(document.getElementById('appShell'));
+
+setAppHeight();
 buildSlideShells();
 renderAll();
 </script>
